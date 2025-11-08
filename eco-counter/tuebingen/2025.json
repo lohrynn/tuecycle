@@ -1,0 +1,1862 @@
+[
+  {
+    "timestamp": "2025-01-01T00:00:00+01:00",
+    "traffic": {
+      "counts": 1067
+    }
+  },
+  {
+    "timestamp": "2025-01-02T00:00:00+01:00",
+    "traffic": {
+      "counts": 1522
+    }
+  },
+  {
+    "timestamp": "2025-01-03T00:00:00+01:00",
+    "traffic": {
+      "counts": 1775
+    }
+  },
+  {
+    "timestamp": "2025-01-04T00:00:00+01:00",
+    "traffic": {
+      "counts": 1525
+    }
+  },
+  {
+    "timestamp": "2025-01-05T00:00:00+01:00",
+    "traffic": {
+      "counts": 995
+    }
+  },
+  {
+    "timestamp": "2025-01-06T00:00:00+01:00",
+    "traffic": {
+      "counts": 1754
+    }
+  },
+  {
+    "timestamp": "2025-01-07T00:00:00+01:00",
+    "traffic": {
+      "counts": 3818
+    }
+  },
+  {
+    "timestamp": "2025-01-08T00:00:00+01:00",
+    "traffic": {
+      "counts": 2620
+    }
+  },
+  {
+    "timestamp": "2025-01-09T00:00:00+01:00",
+    "traffic": {
+      "counts": 4421
+    }
+  },
+  {
+    "timestamp": "2025-01-10T00:00:00+01:00",
+    "traffic": {
+      "counts": 4350
+    }
+  },
+  {
+    "timestamp": "2025-01-11T00:00:00+01:00",
+    "traffic": {
+      "counts": 2442
+    }
+  },
+  {
+    "timestamp": "2025-01-12T00:00:00+01:00",
+    "traffic": {
+      "counts": 1651
+    }
+  },
+  {
+    "timestamp": "2025-01-13T00:00:00+01:00",
+    "traffic": {
+      "counts": 4394
+    }
+  },
+  {
+    "timestamp": "2025-01-14T00:00:00+01:00",
+    "traffic": {
+      "counts": 4438
+    }
+  },
+  {
+    "timestamp": "2025-01-15T00:00:00+01:00",
+    "traffic": {
+      "counts": 3082
+    }
+  },
+  {
+    "timestamp": "2025-01-16T00:00:00+01:00",
+    "traffic": {
+      "counts": 4415
+    }
+  },
+  {
+    "timestamp": "2025-01-17T00:00:00+01:00",
+    "traffic": {
+      "counts": 4303
+    }
+  },
+  {
+    "timestamp": "2025-01-18T00:00:00+01:00",
+    "traffic": {
+      "counts": 2632
+    }
+  },
+  {
+    "timestamp": "2025-01-19T00:00:00+01:00",
+    "traffic": {
+      "counts": 1737
+    }
+  },
+  {
+    "timestamp": "2025-01-20T00:00:00+01:00",
+    "traffic": {
+      "counts": 4534
+    }
+  },
+  {
+    "timestamp": "2025-01-21T00:00:00+01:00",
+    "traffic": {
+      "counts": 4960
+    }
+  },
+  {
+    "timestamp": "2025-01-22T00:00:00+01:00",
+    "traffic": {
+      "counts": 5020
+    }
+  },
+  {
+    "timestamp": "2025-01-23T00:00:00+01:00",
+    "traffic": {
+      "counts": 4313
+    }
+  },
+  {
+    "timestamp": "2025-01-24T00:00:00+01:00",
+    "traffic": {
+      "counts": 4800
+    }
+  },
+  {
+    "timestamp": "2025-01-25T00:00:00+01:00",
+    "traffic": {
+      "counts": 3419
+    }
+  },
+  {
+    "timestamp": "2025-01-26T00:00:00+01:00",
+    "traffic": {
+      "counts": 2265
+    }
+  },
+  {
+    "timestamp": "2025-01-27T00:00:00+01:00",
+    "traffic": {
+      "counts": 3869
+    }
+  },
+  {
+    "timestamp": "2025-01-28T00:00:00+01:00",
+    "traffic": {
+      "counts": 5078
+    }
+  },
+  {
+    "timestamp": "2025-01-29T00:00:00+01:00",
+    "traffic": {
+      "counts": 4887
+    }
+  },
+  {
+    "timestamp": "2025-01-30T00:00:00+01:00",
+    "traffic": {
+      "counts": 4866
+    }
+  },
+  {
+    "timestamp": "2025-01-31T00:00:00+01:00",
+    "traffic": {
+      "counts": 4767
+    }
+  },
+  {
+    "timestamp": "2025-02-01T00:00:00+01:00",
+    "traffic": {
+      "counts": 2834
+    }
+  },
+  {
+    "timestamp": "2025-02-02T00:00:00+01:00",
+    "traffic": {
+      "counts": 2120
+    }
+  },
+  {
+    "timestamp": "2025-02-03T00:00:00+01:00",
+    "traffic": {
+      "counts": 4656
+    }
+  },
+  {
+    "timestamp": "2025-02-04T00:00:00+01:00",
+    "traffic": {
+      "counts": 4871
+    }
+  },
+  {
+    "timestamp": "2025-02-05T00:00:00+01:00",
+    "traffic": {
+      "counts": 4958
+    }
+  },
+  {
+    "timestamp": "2025-02-06T00:00:00+01:00",
+    "traffic": {
+      "counts": 4837
+    }
+  },
+  {
+    "timestamp": "2025-02-07T00:00:00+01:00",
+    "traffic": {
+      "counts": 4697
+    }
+  },
+  {
+    "timestamp": "2025-02-08T00:00:00+01:00",
+    "traffic": {
+      "counts": 3125
+    }
+  },
+  {
+    "timestamp": "2025-02-09T00:00:00+01:00",
+    "traffic": {
+      "counts": 2239
+    }
+  },
+  {
+    "timestamp": "2025-02-10T00:00:00+01:00",
+    "traffic": {
+      "counts": 4418
+    }
+  },
+  {
+    "timestamp": "2025-02-11T00:00:00+01:00",
+    "traffic": {
+      "counts": 4259
+    }
+  },
+  {
+    "timestamp": "2025-02-12T00:00:00+01:00",
+    "traffic": {
+      "counts": 4477
+    }
+  },
+  {
+    "timestamp": "2025-02-13T00:00:00+01:00",
+    "traffic": {
+      "counts": 3803
+    }
+  },
+  {
+    "timestamp": "2025-02-14T00:00:00+01:00",
+    "traffic": {
+      "counts": 3712
+    }
+  },
+  {
+    "timestamp": "2025-02-15T00:00:00+01:00",
+    "traffic": {
+      "counts": 2696
+    }
+  },
+  {
+    "timestamp": "2025-02-16T00:00:00+01:00",
+    "traffic": {
+      "counts": 1724
+    }
+  },
+  {
+    "timestamp": "2025-02-17T00:00:00+01:00",
+    "traffic": {
+      "counts": 4409
+    }
+  },
+  {
+    "timestamp": "2025-02-18T00:00:00+01:00",
+    "traffic": {
+      "counts": 4492
+    }
+  },
+  {
+    "timestamp": "2025-02-19T00:00:00+01:00",
+    "traffic": {
+      "counts": 4558
+    }
+  },
+  {
+    "timestamp": "2025-02-20T00:00:00+01:00",
+    "traffic": {
+      "counts": 4755
+    }
+  },
+  {
+    "timestamp": "2025-02-21T00:00:00+01:00",
+    "traffic": {
+      "counts": 5803
+    }
+  },
+  {
+    "timestamp": "2025-02-22T00:00:00+01:00",
+    "traffic": {
+      "counts": 3874
+    }
+  },
+  {
+    "timestamp": "2025-02-23T00:00:00+01:00",
+    "traffic": {
+      "counts": 2922
+    }
+  },
+  {
+    "timestamp": "2025-02-24T00:00:00+01:00",
+    "traffic": {
+      "counts": 4937
+    }
+  },
+  {
+    "timestamp": "2025-02-25T00:00:00+01:00",
+    "traffic": {
+      "counts": 4441
+    }
+  },
+  {
+    "timestamp": "2025-02-26T00:00:00+01:00",
+    "traffic": {
+      "counts": 4770
+    }
+  },
+  {
+    "timestamp": "2025-02-27T00:00:00+01:00",
+    "traffic": {
+      "counts": 4889
+    }
+  },
+  {
+    "timestamp": "2025-02-28T00:00:00+01:00",
+    "traffic": {
+      "counts": 4100
+    }
+  },
+  {
+    "timestamp": "2025-03-01T00:00:00+01:00",
+    "traffic": {
+      "counts": 2571
+    }
+  },
+  {
+    "timestamp": "2025-03-02T00:00:00+01:00",
+    "traffic": {
+      "counts": 2148
+    }
+  },
+  {
+    "timestamp": "2025-03-03T00:00:00+01:00",
+    "traffic": {
+      "counts": 3612
+    }
+  },
+  {
+    "timestamp": "2025-03-04T00:00:00+01:00",
+    "traffic": {
+      "counts": 3967
+    }
+  },
+  {
+    "timestamp": "2025-03-05T00:00:00+01:00",
+    "traffic": {
+      "counts": 4365
+    }
+  },
+  {
+    "timestamp": "2025-03-06T00:00:00+01:00",
+    "traffic": {
+      "counts": 4432
+    }
+  },
+  {
+    "timestamp": "2025-03-07T00:00:00+01:00",
+    "traffic": {
+      "counts": 4387
+    }
+  },
+  {
+    "timestamp": "2025-03-08T00:00:00+01:00",
+    "traffic": {
+      "counts": 3968
+    }
+  },
+  {
+    "timestamp": "2025-03-09T00:00:00+01:00",
+    "traffic": {
+      "counts": 4227
+    }
+  },
+  {
+    "timestamp": "2025-03-10T00:00:00+01:00",
+    "traffic": {
+      "counts": 4768
+    }
+  },
+  {
+    "timestamp": "2025-03-11T00:00:00+01:00",
+    "traffic": {
+      "counts": 5302
+    }
+  },
+  {
+    "timestamp": "2025-03-12T00:00:00+01:00",
+    "traffic": {
+      "counts": 4406
+    }
+  },
+  {
+    "timestamp": "2025-03-13T00:00:00+01:00",
+    "traffic": {
+      "counts": 4858
+    }
+  },
+  {
+    "timestamp": "2025-03-14T00:00:00+01:00",
+    "traffic": {
+      "counts": 4897
+    }
+  },
+  {
+    "timestamp": "2025-03-15T00:00:00+01:00",
+    "traffic": {
+      "counts": 2729
+    }
+  },
+  {
+    "timestamp": "2025-03-16T00:00:00+01:00",
+    "traffic": {
+      "counts": 2069
+    }
+  },
+  {
+    "timestamp": "2025-03-17T00:00:00+01:00",
+    "traffic": {
+      "counts": 5058
+    }
+  },
+  {
+    "timestamp": "2025-03-18T00:00:00+01:00",
+    "traffic": {
+      "counts": 5589
+    }
+  },
+  {
+    "timestamp": "2025-03-19T00:00:00+01:00",
+    "traffic": {
+      "counts": 6066
+    }
+  },
+  {
+    "timestamp": "2025-03-20T00:00:00+01:00",
+    "traffic": {
+      "counts": 6215
+    }
+  },
+  {
+    "timestamp": "2025-03-21T00:00:00+01:00",
+    "traffic": {
+      "counts": 6422
+    }
+  },
+  {
+    "timestamp": "2025-03-22T00:00:00+01:00",
+    "traffic": {
+      "counts": 4704
+    }
+  },
+  {
+    "timestamp": "2025-03-23T00:00:00+01:00",
+    "traffic": {
+      "counts": 2514
+    }
+  },
+  {
+    "timestamp": "2025-03-24T00:00:00+01:00",
+    "traffic": {
+      "counts": 5141
+    }
+  },
+  {
+    "timestamp": "2025-03-25T00:00:00+01:00",
+    "traffic": {
+      "counts": 5499
+    }
+  },
+  {
+    "timestamp": "2025-03-26T00:00:00+01:00",
+    "traffic": {
+      "counts": 4970
+    }
+  },
+  {
+    "timestamp": "2025-03-27T00:00:00+01:00",
+    "traffic": {
+      "counts": 5675
+    }
+  },
+  {
+    "timestamp": "2025-03-28T00:00:00+01:00",
+    "traffic": {
+      "counts": 6024
+    }
+  },
+  {
+    "timestamp": "2025-03-29T00:00:00+01:00",
+    "traffic": {
+      "counts": 3001
+    }
+  },
+  {
+    "timestamp": "2025-03-30T00:00:00+01:00",
+    "traffic": {
+      "counts": 2803
+    }
+  },
+  {
+    "timestamp": "2025-03-31T00:00:00+02:00",
+    "traffic": {
+      "counts": 5199
+    }
+  },
+  {
+    "timestamp": "2025-04-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 5587
+    }
+  },
+  {
+    "timestamp": "2025-04-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 5992
+    }
+  },
+  {
+    "timestamp": "2025-04-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 6691
+    }
+  },
+  {
+    "timestamp": "2025-04-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 6925
+    }
+  },
+  {
+    "timestamp": "2025-04-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 5452
+    }
+  },
+  {
+    "timestamp": "2025-04-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 3418
+    }
+  },
+  {
+    "timestamp": "2025-04-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 5769
+    }
+  },
+  {
+    "timestamp": "2025-04-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 6278
+    }
+  },
+  {
+    "timestamp": "2025-04-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 6447
+    }
+  },
+  {
+    "timestamp": "2025-04-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 6571
+    }
+  },
+  {
+    "timestamp": "2025-04-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 6606
+    }
+  },
+  {
+    "timestamp": "2025-04-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 6117
+    }
+  },
+  {
+    "timestamp": "2025-04-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 2698
+    }
+  },
+  {
+    "timestamp": "2025-04-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 4793
+    }
+  },
+  {
+    "timestamp": "2025-04-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 5182
+    }
+  },
+  {
+    "timestamp": "2025-04-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 5290
+    }
+  },
+  {
+    "timestamp": "2025-04-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 3879
+    }
+  },
+  {
+    "timestamp": "2025-04-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 1848
+    }
+  },
+  {
+    "timestamp": "2025-04-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 3899
+    }
+  },
+  {
+    "timestamp": "2025-04-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 2086
+    }
+  },
+  {
+    "timestamp": "2025-04-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 1947
+    }
+  },
+  {
+    "timestamp": "2025-04-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 4816
+    }
+  },
+  {
+    "timestamp": "2025-04-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 4464
+    }
+  },
+  {
+    "timestamp": "2025-04-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 4387
+    }
+  },
+  {
+    "timestamp": "2025-04-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 3880
+    }
+  },
+  {
+    "timestamp": "2025-04-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 4523
+    }
+  },
+  {
+    "timestamp": "2025-04-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 5100
+    }
+  },
+  {
+    "timestamp": "2025-04-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 7867
+    }
+  },
+  {
+    "timestamp": "2025-04-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 8149
+    }
+  },
+  {
+    "timestamp": "2025-04-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 8695
+    }
+  },
+  {
+    "timestamp": "2025-05-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 7062
+    }
+  },
+  {
+    "timestamp": "2025-05-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 8212
+    }
+  },
+  {
+    "timestamp": "2025-05-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 4498
+    }
+  },
+  {
+    "timestamp": "2025-05-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 1737
+    }
+  },
+  {
+    "timestamp": "2025-05-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 6096
+    }
+  },
+  {
+    "timestamp": "2025-05-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 6822
+    }
+  },
+  {
+    "timestamp": "2025-05-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 7099
+    }
+  },
+  {
+    "timestamp": "2025-05-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 6865
+    }
+  },
+  {
+    "timestamp": "2025-05-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 7093
+    }
+  },
+  {
+    "timestamp": "2025-05-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 6294
+    }
+  },
+  {
+    "timestamp": "2025-05-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 5650
+    }
+  },
+  {
+    "timestamp": "2025-05-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 7845
+    }
+  },
+  {
+    "timestamp": "2025-05-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 8398
+    }
+  },
+  {
+    "timestamp": "2025-05-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 8736
+    }
+  },
+  {
+    "timestamp": "2025-05-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 7895
+    }
+  },
+  {
+    "timestamp": "2025-05-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 7377
+    }
+  },
+  {
+    "timestamp": "2025-05-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 5262
+    }
+  },
+  {
+    "timestamp": "2025-05-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 5426
+    }
+  },
+  {
+    "timestamp": "2025-05-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 8059
+    }
+  },
+  {
+    "timestamp": "2025-05-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 7798
+    }
+  },
+  {
+    "timestamp": "2025-05-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 5927
+    }
+  },
+  {
+    "timestamp": "2025-05-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 6292
+    }
+  },
+  {
+    "timestamp": "2025-05-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 6727
+    }
+  },
+  {
+    "timestamp": "2025-05-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 5524
+    }
+  },
+  {
+    "timestamp": "2025-05-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 2658
+    }
+  },
+  {
+    "timestamp": "2025-05-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 7065
+    }
+  },
+  {
+    "timestamp": "2025-05-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 7038
+    }
+  },
+  {
+    "timestamp": "2025-05-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 5785
+    }
+  },
+  {
+    "timestamp": "2025-05-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 4500
+    }
+  },
+  {
+    "timestamp": "2025-05-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 7916
+    }
+  },
+  {
+    "timestamp": "2025-05-31T00:00:00+02:00",
+    "traffic": {
+      "counts": 6244
+    }
+  },
+  {
+    "timestamp": "2025-06-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 4321
+    }
+  },
+  {
+    "timestamp": "2025-06-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 4623
+    }
+  },
+  {
+    "timestamp": "2025-06-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 6758
+    }
+  },
+  {
+    "timestamp": "2025-06-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 4756
+    }
+  },
+  {
+    "timestamp": "2025-06-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 7011
+    }
+  },
+  {
+    "timestamp": "2025-06-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 6692
+    }
+  },
+  {
+    "timestamp": "2025-06-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 3978
+    }
+  },
+  {
+    "timestamp": "2025-06-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 1868
+    }
+  },
+  {
+    "timestamp": "2025-06-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 4401
+    }
+  },
+  {
+    "timestamp": "2025-06-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 5451
+    }
+  },
+  {
+    "timestamp": "2025-06-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 5868
+    }
+  },
+  {
+    "timestamp": "2025-06-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 6198
+    }
+  },
+  {
+    "timestamp": "2025-06-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 5682
+    }
+  },
+  {
+    "timestamp": "2025-06-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 5262
+    }
+  },
+  {
+    "timestamp": "2025-06-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 2771
+    }
+  },
+  {
+    "timestamp": "2025-06-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 5432
+    }
+  },
+  {
+    "timestamp": "2025-06-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 6644
+    }
+  },
+  {
+    "timestamp": "2025-06-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 7225
+    }
+  },
+  {
+    "timestamp": "2025-06-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 5960
+    }
+  },
+  {
+    "timestamp": "2025-06-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 6514
+    }
+  },
+  {
+    "timestamp": "2025-06-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 5748
+    }
+  },
+  {
+    "timestamp": "2025-06-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 5573
+    }
+  },
+  {
+    "timestamp": "2025-06-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 7753
+    }
+  },
+  {
+    "timestamp": "2025-06-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 8985
+    }
+  },
+  {
+    "timestamp": "2025-06-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 9290
+    }
+  },
+  {
+    "timestamp": "2025-06-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 7667
+    }
+  },
+  {
+    "timestamp": "2025-06-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 8263
+    }
+  },
+  {
+    "timestamp": "2025-06-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 6585
+    }
+  },
+  {
+    "timestamp": "2025-06-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 5851
+    }
+  },
+  {
+    "timestamp": "2025-06-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 8781
+    }
+  },
+  {
+    "timestamp": "2025-07-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 8732
+    }
+  },
+  {
+    "timestamp": "2025-07-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 9413
+    }
+  },
+  {
+    "timestamp": "2025-07-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 7979
+    }
+  },
+  {
+    "timestamp": "2025-07-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 8862
+    }
+  },
+  {
+    "timestamp": "2025-07-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 7582
+    }
+  },
+  {
+    "timestamp": "2025-07-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 4889
+    }
+  },
+  {
+    "timestamp": "2025-07-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 6499
+    }
+  },
+  {
+    "timestamp": "2025-07-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 6437
+    }
+  },
+  {
+    "timestamp": "2025-07-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 7803
+    }
+  },
+  {
+    "timestamp": "2025-07-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 8742
+    }
+  },
+  {
+    "timestamp": "2025-07-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 8808
+    }
+  },
+  {
+    "timestamp": "2025-07-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 7412
+    }
+  },
+  {
+    "timestamp": "2025-07-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 5905
+    }
+  },
+  {
+    "timestamp": "2025-07-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 6759
+    }
+  },
+  {
+    "timestamp": "2025-07-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 7754
+    }
+  },
+  {
+    "timestamp": "2025-07-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 6961
+    }
+  },
+  {
+    "timestamp": "2025-07-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 8114
+    }
+  },
+  {
+    "timestamp": "2025-07-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 8502
+    }
+  },
+  {
+    "timestamp": "2025-07-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 6532
+    }
+  },
+  {
+    "timestamp": "2025-07-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 5815
+    }
+  },
+  {
+    "timestamp": "2025-07-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 6231
+    }
+  },
+  {
+    "timestamp": "2025-07-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 7053
+    }
+  },
+  {
+    "timestamp": "2025-07-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 8393
+    }
+  },
+  {
+    "timestamp": "2025-07-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 6668
+    }
+  },
+  {
+    "timestamp": "2025-07-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 5805
+    }
+  },
+  {
+    "timestamp": "2025-07-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 4053
+    }
+  },
+  {
+    "timestamp": "2025-07-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 2397
+    }
+  },
+  {
+    "timestamp": "2025-07-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 4648
+    }
+  },
+  {
+    "timestamp": "2025-07-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 6926
+    }
+  },
+  {
+    "timestamp": "2025-07-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 6039
+    }
+  },
+  {
+    "timestamp": "2025-07-31T00:00:00+02:00",
+    "traffic": {
+      "counts": 6359
+    }
+  },
+  {
+    "timestamp": "2025-08-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 3904
+    }
+  },
+  {
+    "timestamp": "2025-08-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 2465
+    }
+  },
+  {
+    "timestamp": "2025-08-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 3273
+    }
+  },
+  {
+    "timestamp": "2025-08-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 4535
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 5825
+    }
+  },
+  {
+    "timestamp": "2025-08-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 6687
+    }
+  },
+  {
+    "timestamp": "2025-08-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 7120
+    }
+  },
+  {
+    "timestamp": "2025-08-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 6633
+    }
+  },
+  {
+    "timestamp": "2025-08-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 5209
+    }
+  },
+  {
+    "timestamp": "2025-08-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 4632
+    }
+  },
+  {
+    "timestamp": "2025-08-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 5988
+    }
+  },
+  {
+    "timestamp": "2025-08-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 6330
+    }
+  },
+  {
+    "timestamp": "2025-08-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 6447
+    }
+  },
+  {
+    "timestamp": "2025-08-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 6097
+    }
+  },
+  {
+    "timestamp": "2025-08-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 5473
+    }
+  },
+  {
+    "timestamp": "2025-08-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 4239
+    }
+  },
+  {
+    "timestamp": "2025-08-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 3900
+    }
+  },
+  {
+    "timestamp": "2025-08-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 5303
+    }
+  },
+  {
+    "timestamp": "2025-08-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 6385
+    }
+  },
+  {
+    "timestamp": "2025-08-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 4759
+    }
+  },
+  {
+    "timestamp": "2025-08-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 3014
+    }
+  },
+  {
+    "timestamp": "2025-08-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 4384
+    }
+  },
+  {
+    "timestamp": "2025-08-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 3469
+    }
+  },
+  {
+    "timestamp": "2025-08-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 3744
+    }
+  },
+  {
+    "timestamp": "2025-08-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 5233
+    }
+  },
+  {
+    "timestamp": "2025-08-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 6085
+    }
+  },
+  {
+    "timestamp": "2025-08-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 4284
+    }
+  },
+  {
+    "timestamp": "2025-08-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 2851
+    }
+  },
+  {
+    "timestamp": "2025-08-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 4812
+    }
+  },
+  {
+    "timestamp": "2025-08-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 3734
+    }
+  },
+  {
+    "timestamp": "2025-08-31T00:00:00+02:00",
+    "traffic": {
+      "counts": 3979
+    }
+  },
+  {
+    "timestamp": "2025-09-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 4314
+    }
+  },
+  {
+    "timestamp": "2025-09-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 5060
+    }
+  },
+  {
+    "timestamp": "2025-09-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 5898
+    }
+  },
+  {
+    "timestamp": "2025-09-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 4322
+    }
+  },
+  {
+    "timestamp": "2025-09-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 5050
+    }
+  },
+  {
+    "timestamp": "2025-09-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 4743
+    }
+  },
+  {
+    "timestamp": "2025-09-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 4693
+    }
+  },
+  {
+    "timestamp": "2025-09-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 4653
+    }
+  },
+  {
+    "timestamp": "2025-09-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 4554
+    }
+  },
+  {
+    "timestamp": "2025-09-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 4866
+    }
+  },
+  {
+    "timestamp": "2025-09-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 5801
+    }
+  },
+  {
+    "timestamp": "2025-09-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 5267
+    }
+  },
+  {
+    "timestamp": "2025-09-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 5001
+    }
+  },
+  {
+    "timestamp": "2025-09-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 2511
+    }
+  },
+  {
+    "timestamp": "2025-09-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 6138
+    }
+  },
+  {
+    "timestamp": "2025-09-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 6745
+    }
+  },
+  {
+    "timestamp": "2025-09-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 7207
+    }
+  },
+  {
+    "timestamp": "2025-09-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 7685
+    }
+  },
+  {
+    "timestamp": "2025-09-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 7669
+    }
+  },
+  {
+    "timestamp": "2025-09-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 5908
+    }
+  },
+  {
+    "timestamp": "2025-09-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 3152
+    }
+  },
+  {
+    "timestamp": "2025-09-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 3517
+    }
+  },
+  {
+    "timestamp": "2025-09-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 5044
+    }
+  },
+  {
+    "timestamp": "2025-09-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 4251
+    }
+  },
+  {
+    "timestamp": "2025-09-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 4547
+    }
+  },
+  {
+    "timestamp": "2025-09-26T00:00:00+02:00",
+    "traffic": {
+      "counts": 5043
+    }
+  },
+  {
+    "timestamp": "2025-09-27T00:00:00+02:00",
+    "traffic": {
+      "counts": 3739
+    }
+  },
+  {
+    "timestamp": "2025-09-28T00:00:00+02:00",
+    "traffic": {
+      "counts": 3408
+    }
+  },
+  {
+    "timestamp": "2025-09-29T00:00:00+02:00",
+    "traffic": {
+      "counts": 6345
+    }
+  },
+  {
+    "timestamp": "2025-09-30T00:00:00+02:00",
+    "traffic": {
+      "counts": 6204
+    }
+  },
+  {
+    "timestamp": "2025-10-01T00:00:00+02:00",
+    "traffic": {
+      "counts": 6269
+    }
+  },
+  {
+    "timestamp": "2025-10-02T00:00:00+02:00",
+    "traffic": {
+      "counts": 5137
+    }
+  },
+  {
+    "timestamp": "2025-10-03T00:00:00+02:00",
+    "traffic": {
+      "counts": 2504
+    }
+  },
+  {
+    "timestamp": "2025-10-04T00:00:00+02:00",
+    "traffic": {
+      "counts": 3031
+    }
+  },
+  {
+    "timestamp": "2025-10-05T00:00:00+02:00",
+    "traffic": {
+      "counts": 1627
+    }
+  },
+  {
+    "timestamp": "2025-10-06T00:00:00+02:00",
+    "traffic": {
+      "counts": 5323
+    }
+  },
+  {
+    "timestamp": "2025-10-07T00:00:00+02:00",
+    "traffic": {
+      "counts": 5946
+    }
+  },
+  {
+    "timestamp": "2025-10-08T00:00:00+02:00",
+    "traffic": {
+      "counts": 6502
+    }
+  },
+  {
+    "timestamp": "2025-10-09T00:00:00+02:00",
+    "traffic": {
+      "counts": 5944
+    }
+  },
+  {
+    "timestamp": "2025-10-10T00:00:00+02:00",
+    "traffic": {
+      "counts": 5860
+    }
+  },
+  {
+    "timestamp": "2025-10-11T00:00:00+02:00",
+    "traffic": {
+      "counts": 4533
+    }
+  },
+  {
+    "timestamp": "2025-10-12T00:00:00+02:00",
+    "traffic": {
+      "counts": 3195
+    }
+  },
+  {
+    "timestamp": "2025-10-13T00:00:00+02:00",
+    "traffic": {
+      "counts": 6159
+    }
+  },
+  {
+    "timestamp": "2025-10-14T00:00:00+02:00",
+    "traffic": {
+      "counts": 6812
+    }
+  },
+  {
+    "timestamp": "2025-10-15T00:00:00+02:00",
+    "traffic": {
+      "counts": 6668
+    }
+  },
+  {
+    "timestamp": "2025-10-16T00:00:00+02:00",
+    "traffic": {
+      "counts": 6293
+    }
+  },
+  {
+    "timestamp": "2025-10-17T00:00:00+02:00",
+    "traffic": {
+      "counts": 6087
+    }
+  },
+  {
+    "timestamp": "2025-10-18T00:00:00+02:00",
+    "traffic": {
+      "counts": 4062
+    }
+  },
+  {
+    "timestamp": "2025-10-19T00:00:00+02:00",
+    "traffic": {
+      "counts": 3229
+    }
+  },
+  {
+    "timestamp": "2025-10-20T00:00:00+02:00",
+    "traffic": {
+      "counts": 5534
+    }
+  },
+  {
+    "timestamp": "2025-10-21T00:00:00+02:00",
+    "traffic": {
+      "counts": 5985
+    }
+  },
+  {
+    "timestamp": "2025-10-22T00:00:00+02:00",
+    "traffic": {
+      "counts": 4827
+    }
+  },
+  {
+    "timestamp": "2025-10-23T00:00:00+02:00",
+    "traffic": {
+      "counts": 4346
+    }
+  },
+  {
+    "timestamp": "2025-10-24T00:00:00+02:00",
+    "traffic": {
+      "counts": 5023
+    }
+  },
+  {
+    "timestamp": "2025-10-25T00:00:00+02:00",
+    "traffic": {
+      "counts": 3011
+    }
+  },
+  {
+    "timestamp": "2025-10-26T00:00:00+01:00",
+    "traffic": {
+      "counts": 2297
+    }
+  },
+  {
+    "timestamp": "2025-10-27T00:00:00+01:00",
+    "traffic": {
+      "counts": 2084
+    }
+  },
+  {
+    "timestamp": "2025-10-28T00:00:00+01:00",
+    "traffic": {
+      "counts": 3000
+    }
+  },
+  {
+    "timestamp": "2025-10-29T00:00:00+01:00",
+    "traffic": {
+      "counts": 4711
+    }
+  },
+  {
+    "timestamp": "2025-10-30T00:00:00+01:00",
+    "traffic": {
+      "counts": 4725
+    }
+  },
+  {
+    "timestamp": "2025-10-31T00:00:00+01:00",
+    "traffic": {
+      "counts": 4402
+    }
+  },
+  {
+    "timestamp": "2025-11-01T00:00:00+01:00",
+    "traffic": {
+      "counts": 2577
+    }
+  },
+  {
+    "timestamp": "2025-11-02T00:00:00+01:00",
+    "traffic": {
+      "counts": 1797
+    }
+  },
+  {
+    "timestamp": "2025-11-03T00:00:00+01:00",
+    "traffic": {
+      "counts": 6008
+    }
+  },
+  {
+    "timestamp": "2025-11-04T00:00:00+01:00",
+    "traffic": {
+      "counts": 6307
+    }
+  },
+  {
+    "timestamp": "2025-11-05T00:00:00+01:00",
+    "traffic": {
+      "counts": 6472
+    }
+  },
+  {
+    "timestamp": "2025-11-06T00:00:00+01:00",
+    "traffic": {
+      "counts": 6212
+    }
+  }
+]
