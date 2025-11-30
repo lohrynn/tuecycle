@@ -1,0 +1,8 @@
+pandas>=2.0.0
+numpy>=1.24.0
+pyarrow>=14.0.0
+plotly>=5.18.0
+scipy>=1.11.0
+ipywidgets>=8.0.0
+jupyter>=1.0.0
+nbformat==4.2.0
