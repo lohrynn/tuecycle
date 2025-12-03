@@ -85,7 +85,7 @@ def plot_time_series(
     
     fig.update_layout(
         title=title,
-        legend=dict(y=1.15, orientation='h'),
+        legend=dict(y=1, orientation='h'),
         xaxis=dict(
             title='Datetime',
             rangeslider=dict(visible=show_rangeslider),
