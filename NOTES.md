@@ -21,3 +21,14 @@ Ziele
 
 - Outlier anschauen: Welche Daten doppelt/nicht?
 - sollen wir Selbst definieren
+
+# Meeting 10.12.25
+
+- Wie kriegt man bessere Abhängigkeit von Regen (Temp raus)?
+  - Zahlen nach Temp clustern
+  - Temp im verhältnis von Wochen
+  - Temp vs. Zähler als Kurve mit Regen und Ohne Regen
+    - Regler hinzufügen, um verschiedene Bedingungen für die Kurven festzulegen (Zeit)
+  - Was wir rausfinden wollen ist die bedingte Wkeit?
+  - Karte wär cool
+  - Tabelle mit was wir für Daten haben
