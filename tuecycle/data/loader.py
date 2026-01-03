@@ -124,15 +124,12 @@ class DataManager:
         
         return df_hourly.sort_values('iso_timestamp').reset_index(drop=True)
     
-    def _load_weather_data(self, city: str) -> pd.DataFrame:
-        """Load weather data for a city."""
-        start_year, start_month, start_day = self.start_date
-        end_year, end_month, end_day = self.end_date
+    def _load_weather_data(self, station: str) -> pd.DataFrame:
+        """Load weather data for a station."""
         
         weather_file = (
             self.base_path / 
-            f"weather_data/hourly/{city.lower()}_weather_"
-            f"{start_year}-{start_month}-{start_day}_{end_year}-{end_month}-{end_day}.csv"
+            f"weather_data/hourly/weather_{station.lower()}.csv"
         )
         
         if not weather_file.exists():
@@ -151,18 +148,18 @@ class DataManager:
         counter_df = counter_df.rename(columns={'iso_timestamp': 'datetime'})
         
         # Load weather for this city
-        weather_df = self._load_weather_data(station.city)
+        weather_df = self._load_weather_data(station.station)
         
         # Merge on datetime
         merged = pd.merge(
             counter_df[['datetime', 'channels_all']],
-            weather_df[['datetime', 'prcp', 'temp']],
+            weather_df[['datetime', 'precipitation (mm)', 'temperature_2m (°C)']],
             on='datetime',
             how='outer'
         ).sort_values('datetime')
         
         # Rename columns
-        merged = merged.rename(columns={'channels_all': 'bike', 'prcp': 'rain'})
+        merged = merged.rename(columns={'channels_all': 'bike', 'precipitation (mm)': 'rain', 'temperature_2m (°C)': 'temp'})
         
         # Ensure numeric types
         merged[['bike', 'rain', 'temp']] = merged[['bike', 'rain', 'temp']].apply(

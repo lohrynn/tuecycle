@@ -30,25 +30,25 @@ print(df['counter_site'].unique())
 Edit `tuecycle/config/stations.py` and add a new entry to the `STATIONS` dictionary:
 
 ```python
-STATIONS["karlsruhe_schloss"] = Station(
-    alias="karlsruhe_schloss",           # Short identifier (used in code)
-    city="karlsruhe",                     # Must match weather file name!
-    counter_name="Schlossplatz Barometer", # Exact name from CSV
-    display_name="Karlsruhe (Schlossplatz)", # Human-readable for plots
-    color="#B3DE69",                      # Hex color for multi-station plots
+STATIONS["freiburg_wiwili"] = Station(
+    alias="freiburg_wiwili",                # Short identifier (used in code)
+    station="freiburg_wiwilibruecke",       # Must match weather file name!
+    counter_name="Wiwilibrücke",            # Exact name from CSV
+    display_name="Freiburg (Wiwilibrücke)", # Human-readable for plots
+    color="#FDB462",                        # Hex color for multi-station plots
 )
 ```
 
 ### Step 3: Ensure Weather Data Exists
 
-The `city` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
+The `station` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
 
 ### Step 4: Test
 
 ```python
 from tuecycle import DataManager
 dm = DataManager()
-df = dm.get("karlsruhe_schloss")
+df = dm.get("freiburg_wiwili")
 print(df.head())
 ```
 
@@ -56,75 +56,44 @@ print(df.head())
 
 ## 2. Adding Weather Data for a New City
 
+### Data Sources
+
+You can obtain hourly weather data from [Open-Meteo](https://open-meteo.com/en/docs/historical-weather-api) (free).
+
 ### Required File Format
 
 Weather files must be placed in `weather_data/hourly/` with this naming convention:
 
-```
-{city}_weather_{start_year}-{start_month}-{start_day}_{end_year}-{end_month}-{end_day}.csv
+```shell
+weather_{city}_{station}.csv
 ```
 
-Example: `karlsruhe_weather_2024-11-1_2025-10-31.csv`
+Example: `weather_freiburg_wiwilibruecke.csv`
 
 ### Required Columns
 
 The CSV must have these columns:
 
 | Column | Description | Example |
-|--------|-------------|---------|
-| `time` | ISO datetime | `2024-11-01 00:00:00` |
-| `temp` | Temperature in °C | `5.2` |
-| `prcp` | Precipitation in mm | `0.5` |
+| ------ | ----------- | ------- |
+| `time` | ISO datetime | `2019-12-01T00:00` |
+| `temperature_2m (°C)` | Temperature in °C | `5.2` |
+| `precipitation (mm)` | Precipitation in mm | `0.5` |
 
 Optional columns (not currently used but can be kept):
-- `dwpt` - Dew point
-- `rhum` - Relative humidity
-- `snow` - Snow depth
-- `wdir`, `wspd`, `wpgt` - Wind data
-- `pres` - Pressure
-- `tsun` - Sunshine duration
-- `coco` - Weather condition code
+apparent_temperature (°C),rain (mm),snow_depth (m),snowfall (cm),weather_code (wmo code),cloud_cover (%),cloud_cover_high (%),cloud_cover_mid (%),cloud_cover_low (%),wind_speed_10m (km/h),wind_direction_100m (°),wind_direction_10m (°),wind_speed_100m (km/h),wind_gusts_10m (km/h),is_day (),sunshine_duration (s),pressure_msl (hPa),surface_pressure (hPa)
 
-### Data Sources
-
-You can obtain hourly weather data from:
-
-1. **Open-Meteo** (free, recommended): https://open-meteo.com/en/docs/historical-weather-api
-2. **Meteostat** (free): https://meteostat.net/
-3. **DWD Climate Data Center** (official German data): https://opendata.dwd.de/
-
-### Example: Downloading from Open-Meteo
-
-```python
-import requests
-import pandas as pd
-
-# Karlsruhe coordinates
-lat, lon = 49.0069, 8.4037
-
-url = f"https://archive-api.open-meteo.com/v1/archive"
-params = {
-    "latitude": lat,
-    "longitude": lon,
-    "start_date": "2024-11-01",
-    "end_date": "2025-10-31",
-    "hourly": "temperature_2m,precipitation",
-    "timezone": "Europe/Berlin"
-}
-
-response = requests.get(url, params=params)
-data = response.json()
-
-df = pd.DataFrame({
-    "time": data["hourly"]["time"],
-    "temp": data["hourly"]["temperature_2m"],
-    "prcp": data["hourly"]["precipitation"]
-})
-
-df.to_csv("weather_data/hourly/karlsruhe_weather_2024-11-1_2025-10-31.csv", index=False)
-```
-
----
+- `relative_humidity_2m (%)`
+- `dew_point_2m (°C)`
+- `apparent_temperature (°C)`
+- `rain (mm)`
+- `snow_depth (m)`, `snowfall (cm)`
+- `weather_code (wmo code)`
+- `cloud_cover (%)`, `cloud_cover_high (%)`, `cloud_cover_mid (%)`, `cloud_cover_low (%)`,
+- `wind_speed_10m (km/h)`, `wind_direction_100m (°)`, `wind_direction_10m (°)`, `wind_speed_100m (km/h)`, `wind_gusts_10m (km/h)`
+- `is_day ()`
+- `sunshine_duration (s)`
+- `pressure_msl (hPa)`, `surface_pressure (hPa)`
 
 ## 3. Creating a New Plot Function
 
@@ -271,6 +240,7 @@ Use consistent colors per city. Current palette:
 ## Quick Reference
 
 ### Load Data
+
 ```python
 from tuecycle import DataManager
 dm = DataManager()
@@ -278,6 +248,7 @@ df = dm.get("station_alias")
 ```
 
 ### Create Plot
+
 ```python
 from tuecycle.plots import get_plot
 fig = get_plot("plot_name")(df, title="My Title")
@@ -285,6 +256,7 @@ fig.show()
 ```
 
 ### List Available
+
 ```python
 from tuecycle import list_stations
 from tuecycle.plots import list_plots
