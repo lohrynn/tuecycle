@@ -788,26 +788,27 @@ def plot_bike_vs_rain_rush_hour_city(
 
 @register_plot(
     "city_rain_share_boxplot",
-    "Boxplot showing the share of bike rides during rain per city (All Categories)"
+    "Boxplot showing the share of bike rides during rain per city"
 )
 def plot_city_rain_share(
-    df_city_rain: pd.DataFrame,  # DataFrame with columns ["city", "rain_share", "time_category"]
-    categories: list | None = None,  # Which categories to include, None = all
+    df_city_rain: pd.DataFrame,
+    categories: list | None = None,
     title: str = None
 ):
     """
     Creates a boxplot of the rain share per city for each time category.
 
     Args:
-        df_city_rain: DataFrame with columns ["city", "rain_share", "time_category"]
+        df_city_rain: DataFrame
         categories: list of time categories to include (None = all)
-        title: optional plot title
+        title: plot title
 
     Returns:
         plotly.graph_objects.Figure
+
     """
     if title is None:
-        title = "Rain share of bike counts per city (All Categories)"
+        title = "Rain share of bike counts per city"
 
     df_plot = df_city_rain.copy()
     
