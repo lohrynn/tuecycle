@@ -12,9 +12,6 @@ from typing import Dict
 @dataclass(frozen=True)
 class Station:
     """A bike counting station with metadata."""
-
-    city: str
-    """Name of the city (e.g. 'tuebingen')"""
     
     alias: str
     """Short identifier for the station (e.g., 'tuebingen_tunnel')."""
@@ -39,7 +36,6 @@ class Station:
 STATIONS: Dict[str, Station] = {
     # Freiburg
     "freiburg_dreisam": Station(
-        city="freiburg",
         alias="freiburg_dreisam",
         station="freiburg_dreisam",
         counter_name="FR1 Dreisam / Otto-Wels-Str.",
@@ -47,7 +43,6 @@ STATIONS: Dict[str, Station] = {
         color="#FDB462",
     ),
     "freiburg_eschholz": Station(
-        city="freiburg",
         alias="freiburg_eschholz",
         station="freiburg_eschholzstrasse",
         counter_name="FR3 Eschholzstr. / Egonstr. einzeln",
@@ -55,7 +50,6 @@ STATIONS: Dict[str, Station] = {
         color="#FDB462",
     ),
     "freiburg_gueterbahn": Station(
-        city="freiburg",
         alias="freiburg_gueterbahn",
         station="freiburg_gueterbahn",
         counter_name="FR2 Güterbahn / Ferd.-Weiß-Str.",
@@ -63,7 +57,6 @@ STATIONS: Dict[str, Station] = {
         color="#FDB462",
     ),
     "freiburg_wiwili": Station(
-        city="freiburg",
         alias="freiburg_wiwili",
         station="freiburg_wiwilibruecke",
         counter_name="Wiwilibrücke",
@@ -73,7 +66,6 @@ STATIONS: Dict[str, Station] = {
     
     # Heidelberg
     "heidelberg_ernst_walz": Station(
-        city="heidelberg",
         alias="heidelberg_ernst_walz",
         station="heidelberg_ernstwalzbruecke",
         counter_name="Ernst-Walz-Brücke Querschnitte",
@@ -81,7 +73,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_gaisberg": Station(
-        city="heidelberg",
         alias="heidelberg_gaisberg",
         station="heidelberg_gaisbergstrasse",
         counter_name="Gaisbergstraße",
@@ -89,7 +80,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_kurfuersten": Station(
-        city="heidelberg",
         alias="heidelberg_kurfuersten",
         station="heidelberg_kurfuerstenanlage",
         counter_name="Kurfürstenanlage Querschnitt",
@@ -97,7 +87,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_liebermann": Station(
-        city="heidelberg",
         alias="heidelberg_liebermann",
         station="heidelberg_liebermannstrasse",
         counter_name="Liebermannstraße",
@@ -105,7 +94,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_mannheimer": Station(
-        city="heidelberg",
         alias="heidelberg_mannheimer",
         station="heidelberg_mannheimerstrasse",
         counter_name="Mannheimer Straße",
@@ -113,7 +101,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_ploeck": Station(
-        city="heidelberg",
         alias="heidelberg_ploeck",
         station="heidelberg_ploeck",
         counter_name="Plöck",
@@ -121,7 +108,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_rohrbacher": Station(
-        city="heidelberg",
         alias="heidelberg_rohrbacher",
         station="heidelberg_rohrbacherstrasse",
         counter_name="Rohrbacher Straße Querschnitt",
@@ -129,7 +115,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_schlierbacher": Station(
-        city="heidelberg",
         alias="heidelberg_schlierbacher",
         station="heidelberg_schlierbacher",
         counter_name="Schlierbacher Landstraße",
@@ -137,7 +122,6 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_theodor_heuss": Station(
-        city="heidelberg",
         alias="heidelberg_theodor_heuss",
         station="heidelberg_theodorheussbruecke",
         counter_name="Theodor-Heuss-Brücke",
@@ -145,17 +129,29 @@ STATIONS: Dict[str, Station] = {
         color="#FB8072",
     ),
     "heidelberg_ziegelhaeuser": Station(
-        city="heidelberg",
         alias="heidelberg_ziegelhaeuser",
         station="heidelberg_ziegelhaeuser",
         counter_name="Ziegelhäuser Landstraße",
         display_name="Heidelberg (Ziegelhäuser Landstraße)",
         color="#FB8072",
     ),
+    "heidelberg_berliner": Station(
+        alias="heidelberg_ziegelhaeuser",
+        station="heidelberg_berlinerstrasse",
+        counter_name="Berliner Straße Querschnitt",
+        display_name="Heidelberg (Berliner Straße)",
+        color="#FB8072",
+    ),
+    "heidelberg_eppelheimer": Station(
+        alias="heidelberg_eppelheimer",
+        station="heidelberg_eppelheimerstrasse",
+        counter_name="Eppelheimer Str. Querschnitt",
+        display_name="Heidelberg (Eppelheimer Straße)",
+        color="#FB8072",
+    ),
     
     # Heilbronn
     "heilbronn_neckarufer": Station(
-        city="heilbronn",
         alias="heilbronn_neckarufer",
         station="heilbronn_neckarufer",
         counter_name="Neckarufer",
@@ -163,7 +159,6 @@ STATIONS: Dict[str, Station] = {
         color="#C27EB8",
     ),
     "heilbronn_nord": Station(
-        city="heilbronn",
         alias="heilbronn_nord",
         station="heilbronn_nord",
         counter_name="Route Nord",
@@ -171,7 +166,6 @@ STATIONS: Dict[str, Station] = {
         color="#C27EB8",
     ),
     "heilbronn_sued": Station(
-        city="heilbronn",
         alias="heilbronn_sued",
         station="heilbronn_sued",
         counter_name="Route Süd",
@@ -181,7 +175,6 @@ STATIONS: Dict[str, Station] = {
     
     # Karlsruhe
     "karlsruhe_erbprinzen": Station(
-        city="karlsruhe",
         alias="karlsruhe_erbprinzen",
         station="karlsruhe_erbprinzenstrasse",
         counter_name="Erbprinzenstraße",
@@ -191,7 +184,6 @@ STATIONS: Dict[str, Station] = {
     
     # Kirchheim 
     "kirchheim_barometer": Station(
-        city="kirchheim",
         alias="kirchheim_barometer",
         station="kirchheim_barometer",
         counter_name="Barometer Kirchheim u. Teck",
@@ -201,7 +193,6 @@ STATIONS: Dict[str, Station] = {
     
     # Konstanz
     "konstanz_herose": Station(
-        city="konstanz",
         alias="konstanz_herose",
         station="konstanz_herosepark",
         counter_name="Herosepark",
@@ -211,7 +202,6 @@ STATIONS: Dict[str, Station] = {
     
     # Lörrach
     "loerrach_berliner": Station(
-        city="loerrach",
         alias="loerrach_berliner",
         station="loerrach_berlinerplatz",
         counter_name="Berliner Platz",
@@ -219,7 +209,6 @@ STATIONS: Dict[str, Station] = {
         color="#FAA43A",
     ),
     "loerrach_friedhof": Station(
-        city="loerrach",
         alias="loerrach_friedhof",
         station="loerrach_hauptfriedhof",
         counter_name="Untere Hartmattenstraße / Hauptfriedhof",
@@ -229,7 +218,6 @@ STATIONS: Dict[str, Station] = {
     
     # Ludwigsburg
     "ludwigsburg_alleen": Station(
-        city="ludwigsburg",
         alias="ludwigsburg_alleen",
         station="ludwigsburg_alleenstrasse",
         counter_name="Alleenstraße",
@@ -237,7 +225,6 @@ STATIONS: Dict[str, Station] = {
         color="#DFF15C",
     ),
     "ludwigsburg_favorite": Station(
-        city="ludwigsburg",
         alias="ludwigsburg_favorite",
         station="ludwigsburg_favoritepark",
         counter_name="Marbacher Straße - Favoritepark",
@@ -245,7 +232,6 @@ STATIONS: Dict[str, Station] = {
         color="#DFF15C",
     ),
     "ludwigsburg_neckarbruecke": Station(
-        city="ludwigsburg",
         alias="ludwigsburg_neckarbruecke",
         station="ludwigsburg_neckarbruecke",
         counter_name="Marbacher Straße - Neckarbrücke",
@@ -255,7 +241,6 @@ STATIONS: Dict[str, Station] = {
     
     # Mannheim
     "mannheim_jungbusch": Station(
-        city="mannheim",
         alias="mannheim_jungbusch",
         station="mannheim_jungbuschbruecke",
         counter_name="Jungbuschbrücke",
@@ -263,7 +248,6 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
     "mannheim_konrad_adenauer": Station(
-        city="mannheim",
         alias="mannheim_konrad_adenauer",
         station="mannheim_konradadenauerbruecke",
         counter_name="Konrad-Adenauer-Brücke",
@@ -271,7 +255,6 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
      "mannheim_kurpfalz": Station(
-        city="mannheim",
         alias="mannheim_kurpfalz",
         station="mannheim_kurpfalzbruecke",
         counter_name="Kurpfalzbrücke",
@@ -279,7 +262,6 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
     "mannheim_lindenhof": Station(
-        city="mannheim",
         alias="mannheim_lindenhof",
         station="mannheim_lindenhofueberfuehrung",
         counter_name="Lindenhofüberführung",
@@ -287,7 +269,6 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
     "mannheim_renz": Station(
-        city="mannheim",
         alias="mannheim_renz",
         station="mannheim_renzstrasse",
         counter_name="Renzstraße",
@@ -295,7 +276,6 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
     "mannheim_schloss": Station(
-        city="mannheim",
         alias="mannheim_schloss",
         station="mannheim_schlosspark",
         counter_name="Schlosspark Lindenhof (Richtung Jugendherberge)",
@@ -303,17 +283,64 @@ STATIONS: Dict[str, Station] = {
         color="#80B1D3",
     ),
     "mannheim_schwetzinger": Station(
-        city="mannheim",
         alias="mannheim_schwetzinger",
         station="mannheim_schwetzingerstrasse",
-        counter_name="Neckarauer Übergang -Schwetzinger Str..",
+        counter_name="Neckarauer Übergang -Schwetzinger Str.",
         display_name="Mannheim (Schwetzinger Straße)",
+        color="#80B1D3",
+    ),
+    "mannheim_feudenheimstr_aufwaerts": Station(
+        alias="mannheim_feudenheimstr_aufwaerts",
+        station="mannheim_feudenheimstr_aufwaerts",
+        counter_name="Feudenheimstr. stadtauswärts",
+        display_name="Mannheim (Feudenheimstr. stadtauswärts)",
+        color="#80B1D3",
+    ),
+    "mannheim_feudenheimstr_einwaerts": Station(
+        alias="mannheim_feudenheimstr_einwaerts",
+        station="mannheim_feudenheimstr_einwaerts",
+        counter_name="Feudenheimerstr. stadteinwärts",
+        display_name="Mannheim (Feudenheimstr. stadteinwärts)",
+        color="#80B1D3",
+    ),
+    "mannheim_luzenbergstr": Station(
+        alias="mannheim_luzenbergstr",
+        station="mannheim_luzenbergstr",
+        counter_name="Luzenbergstr.",
+        display_name="Mannheim (Luzenbergstr.)",
+        color="#80B1D3",
+    ),
+    "mannheim_B38": Station(
+        alias="mannheim_B38",
+        station="mannheim_B38",
+        counter_name="B38. RI. AUS",
+        display_name="Mannheim (B38. RI. AUS)",
+        color="#80B1D3",
+    ),
+    "mannheim_theodor_heuss_in": Station(
+        alias="mannheim_theodor_heuss_in",
+        station="mannheim_theodor_heuss_in",
+        counter_name="Theodor-Heuss-Anlage. RI. IN.",
+        display_name="Mannheim (Theodor-Heuss-Anlage IN)",
+        color="#80B1D3",
+    ),
+    "mannheim_theodor_heuss_aus": Station(
+        alias="mannheim_theodor_heuss_aus",
+        station="mannheim_theodor_heuss_aus",
+        counter_name="Theodor-Heuss-Anlage. RI. AUS",
+        display_name="Mannheim (Theodor-Heuss-Anlage AUS)",
+        color="#80B1D3",
+    ),
+    "mannheim_fernmeldeturm": Station(
+        alias="mannheim_fernmeldeturm",
+        station="mannheim_fernmeldeturm",
+        counter_name="Fernmeldeturm",
+        display_name="Mannheim (Fernmeldeturm)",
         color="#80B1D3",
     ),
     
     # Offenburg
     "offenburg_haupt": Station(
-        city="offenburg",
         alias="offenburg_haupt",
         station="offenburg_hauptstrasse",
         counter_name="Hauptstraße neu",
@@ -323,7 +350,6 @@ STATIONS: Dict[str, Station] = {
     
     # Ravensburg
     "ravensburg_bahnhof": Station(
-        city="ravensburg",
         alias="ravensburg_bahnhof",
         station="ravensburg_bahnhofstrasse",
         counter_name="08 RV Bahnhofstr.",
@@ -331,7 +357,6 @@ STATIONS: Dict[str, Station] = {
         color="#BC80BD",
     ),
     "ravensburg_eishalle": Station(
-        city="ravensburg",
         alias="ravensburg_eishalle",
         station="ravensburg_eissporthalle",
         counter_name="05 RV Eissporthalle",
@@ -339,7 +364,6 @@ STATIONS: Dict[str, Station] = {
         color="#BC80BD",
     ),
     "ravensburg_meer_ab": Station(
-        city="ravensburg",
         alias="ravensburg_meer_ab",
         station="ravensburg_meersburgerab",
         counter_name="06 Meersburger Brücke abwärts",
@@ -347,7 +371,6 @@ STATIONS: Dict[str, Station] = {
         color="#BC80BD",
     ),
     "ravensburg_meer_auf": Station(
-        city="ravensburg",
         alias="ravensburg_meer_auf",
         station="ravensburg_meersburgerauf",
         counter_name="07 Meersburger Brücke aufwärts",
@@ -357,7 +380,6 @@ STATIONS: Dict[str, Station] = {
     
     # Stuttgart
     "stuttgart_boeblinger": Station(
-        city="stuttgart",
         alias="stuttgart_boeblinger",
         station="stuttgart_boeblingerstrasse",
         counter_name="Böblinger Straße",
@@ -365,7 +387,6 @@ STATIONS: Dict[str, Station] = {
         color="#BEBADA",
     ),
     "stuttgart_koenig_karls": Station(
-        city="stuttgart",
         alias="stuttgart_koenig_karls",
         station="stuttgart_koenigkarlsbruecke",
         counter_name="König-Karls-Brücke Barometer",
@@ -373,7 +394,6 @@ STATIONS: Dict[str, Station] = {
         color="#BEBADA",
     ),
     "stuttgart_taubenheim": Station(
-        city="stuttgart",
         alias="stuttgart_taubenheim",
         station="stuttgart_taubenheimstrasse",
         counter_name="Taubenheimstraße",
@@ -381,25 +401,99 @@ STATIONS: Dict[str, Station] = {
         color="#BEBADA",
     ),
     "stuttgart_waiblinger": Station(
-        city="stuttgart",
         alias="stuttgart_waiblinger",
         station="stuttgart_waiblingerstrasse",
         counter_name="Waiblinger Straße",
         display_name="Stuttgart (Waiblinger Straße)",
         color="#BEBADA",
     ),
+    "stuttgart_samaraweg": Station(
+        alias="stuttgart_samaraweg",
+        station="stuttgart_samaraweg",
+        counter_name="Samaraweg",
+        display_name="Stuttgart (Samaraweg)",
+        color="#BEBADA",
+    ),
+    "stuttgart_waldburgstrasse": Station(
+        alias="stuttgart_waldburgstrasse",
+        station="stuttgart_waldburgstrasse",
+        counter_name="Waldburgstraße",
+        display_name="Stuttgart (Waldburgstraße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_kremmlerstrasse": Station(
+        alias="stuttgart_kremmlerstrasse",
+        station="stuttgart_kremmlerstrasse",
+        counter_name="Kremmlerstraße",
+        display_name="Stuttgart (Kremmlerstraße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_kirchheimer": Station(
+        alias="stuttgart_kirchheimer",
+        station="stuttgart_kirchheimer",
+        counter_name="Kirchheimer Straße",
+        display_name="Stuttgart (Kirchheimer Straße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_stuttgarter": Station(
+        alias="stuttgart_stuttgarter",
+        station="stuttgart_stuttgarter",
+        counter_name="Stuttgarter Straße",
+        display_name="Stuttgart (Stuttgarter Straße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_solitudestrasse": Station(
+        alias="stuttgart_solitudestrasse",
+        station="stuttgart_solitudestrasse",
+        counter_name="Solitudestraße",
+        display_name="Stuttgart (Solitudestraße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_kraehenwald": Station(
+        alias="stuttgart_kraehenwald",
+        station="stuttgart_kraehenwald",
+        counter_name="Am Kräherwald",
+        display_name="Stuttgart (Am Kräherwald)",
+        color="#BEBADA",
+    ),
+    "stuttgart_inselstrasse": Station(
+        alias="stuttgart_inselstrasse",
+        station="stuttgart_inselstrasse",
+        counter_name="Inselstraße",
+        display_name="Stuttgart (Inselstraße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_neckartalstrasse": Station(
+        alias="stuttgart_neckartalstrasse",
+        station="stuttgart_neckartalstrasse",
+        counter_name="Neckartalstraße",
+        display_name="Stuttgart (Neckartalstraße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_lautenschlager": Station(
+        alias="stuttgart_lautenschlager",
+        station="stuttgart_lautenschlager",
+        counter_name="Lautenschlager Straße",
+        display_name="Stuttgart (Lautenschlager Straße)",
+        color="#BEBADA",
+    ),
+    "stuttgart_tuebinger": Station(
+        alias="stuttgart_tuebinger",
+        station="stuttgart_tuebinger",
+        counter_name="Tübinger Straße",
+        display_name="Stuttgart (Tübinger Straße)",
+        color="#BEBADA",
+    ),
     
     # Tübingen
     "tuebingen_hirschau": Station(
-        city="tuebingen",
         alias="tuebingen_hirschau",
         station="tuebingen_hirschau",
-        counter_name="Neckartalradweg Hirschau",
+        counter_name="Neckartalradweg Hirschau - parallel L371",
         display_name="Tübingen (Hirschau)",
         color="#8DD3C7",
     ),
     "tuebingen_tunnel": Station(
-        city="tuebingen",
         alias="tuebingen_tunnel",
         station="tuebingen_radtunnel",
         counter_name="Fuß- & Radtunnel Südportal - Derendinger Allee",
@@ -407,17 +501,29 @@ STATIONS: Dict[str, Station] = {
         color="#8DD3C7",
     ),
     "tuebingen_steinlach": Station(
-        city="tuebingen",
         alias="tuebingen_steinlach",
         station="tuebingen_steinlachallee",
         counter_name="Unterführung Steinlach/Karlstraße Südseite",
         display_name="Tübingen (Steinlach)",
         color="#8DD3C7",
     ),
+    "tuebingen_radbrueckemitte": Station(
+        alias="tuebingen_radbrueckemitte",
+        station="tuebingen_radbrueckemitte",
+        counter_name="Radbrücke Mitte - Wöhrdstraße",
+        display_name="Tübingen (Radbrücke Mitte)",
+        color="#8DD3C7",
+    ),
+    "tuebingen_radbrueckeost": Station(
+        alias="tuebingen_radbrueckeost",
+        station="tuebingen_radbrueckeost",
+        counter_name="Radbrücke Ost",
+        display_name="Tübingen (Radbrücke Ost)",
+        color="#8DD3C7",
+    ),
     
     # Ulm
     "ulm_lupferbruecke": Station(
-        city="ulm",
         alias="ulm_lupferbruecke",
         station="ulm_lupferbruecke",
         counter_name="Blautal Lupferbrücke",

@@ -12,6 +12,7 @@ import plotly.express as px
 from scipy.fft import fft, fftfreq
 from scipy.ndimage import gaussian_filter
 from scipy import stats
+from plotly.subplots import make_subplots
 
 from tuecycle.plots.registry import register_plot
 from tuecycle.utils.transforms import (
@@ -693,4 +694,121 @@ def plot_winter_summer_ratio(
         height=500,
     )
     
+    return fig
+
+
+# =============================================================================
+# Three-cities with rain comparison
+# =============================================================================
+@register_plot(
+    "bike_vs_rain_rush_hour_city",
+    "Bike counter with rain at ≤5°C - Rush Hour"
+)
+def plot_bike_vs_rain_rush_hour_city(
+    data_dict: dict,      # {station_alias: DataFrame}
+    cities,
+    title: str = "Bike counter with rain at ≤5°C - Rush Hour"
+) -> go.Figure:
+    """
+    Three separate subplots per city with the bike counter dependent of rain/snow in mm.
+    Only rush hour (Morning 7-9, Evening 17-19).
+    
+    Args:
+        data_dict: dict with {station_alias: DataFrame} of all stations
+        cities: list of cities
+        title: plot titel
+        
+    Returns:
+        Plotly Figure Objekt
+    """
+    # Farben für Morning vs Evening Rush
+    color_map = {
+        'Morning Rush (7-9)': 'orange',
+        'Evening Rush (17-19)': 'blue'
+    }
+
+    fig = make_subplots(
+        rows=1,
+        cols=len(cities),
+        shared_yaxes=True,
+        subplot_titles=[city.capitalize() for city in cities]
+    )
+
+    for col, city in enumerate(cities, start=1):
+        # 🔹 City filter using alias
+        city_lower = city.lower()
+        city_stations = [alias for alias in data_dict.keys() if alias.lower().startswith(city_lower)]
+        if not city_stations:
+            continue
+
+        # 🔹 Combine DataFrames of all stations in the city
+        city_df_list = [data_dict[alias].copy() for alias in city_stations]
+        city_df = pd.concat(city_df_list, ignore_index=True)
+        if city_df.empty:
+            continue
+
+        # 🔹 Plot points with different colors for morning and evening rush
+        for rush_type in ['Morning Rush (7-9)', 'Evening Rush (17-19)']:
+            df_rush = city_df[city_df['time_category'] == rush_type]
+            if df_rush.empty:
+                continue
+
+            fig.add_trace(
+                go.Scatter(
+                    x=df_rush['rain'],
+                    y=df_rush['bike'],
+                    mode='markers',
+                    name=rush_type if col == 1 else None,  # Legende nur einmal
+                    marker=dict(size=5, color=color_map[rush_type], opacity=0.8),
+                    hovertemplate="Rain: %{x} mm<br>Bikes: %{y}<br>Rush: %{customdata}",
+                    customdata=df_rush['time_category'],
+                    showlegend=(col == 1)
+                ),
+                row=1, col=col
+            )
+
+        fig.update_xaxes(title_text="Rain/Snow [mm]", row=1, col=col)
+
+    fig.update_yaxes(title_text="Number of bikes", row=1, col=1)
+
+    fig.update_layout(
+        title=title,
+        height=500,
+        width=1200,
+        hovermode="closest",
+    )
+
+    return fig
+
+@register_plot(
+    "city_rain_share_boxplot",
+    "Boxplot showing the share of bike rides during rain per city (Rush Hour)"
+)
+def plot_city_rain_share(
+    df_city_rain: pd.DataFrame,  # DataFrame mit Spalten ["city", "rain_share"]
+    title: str = None
+):
+    """
+    Creates a boxplot of the rain share per city.
+
+    Args:
+        df_city_rain: DataFrame with columns ["city", "rain_share"]
+        title: optional plot title
+
+    Returns:
+        plotly.graph_objects.Figure
+    """
+    if title is None:
+        title = "Rain share of bike counts per city (Rush Hour)"
+
+    fig = px.box(
+        df_city_rain,
+        x="city",
+        y="rain_share",
+        points="all",
+        color="city",
+        labels={"city": "City", "rain_share": "Rain share of bike counts"},
+        title=title
+    )
+    fig.update_layout(showlegend=False, yaxis_tickformat=".0%")
     return fig
