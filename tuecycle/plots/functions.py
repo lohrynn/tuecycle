@@ -702,29 +702,31 @@ def plot_winter_summer_ratio(
 # =============================================================================
 @register_plot(
     "bike_vs_rain_rush_hour_city",
-    "Bike counter with rain at ≤5°C - Rush Hour"
+    "Bike counter with rain - All categories"
 )
 def plot_bike_vs_rain_rush_hour_city(
     data_dict: dict,      # {station_alias: DataFrame}
     cities,
-    title: str = "Bike counter with rain at ≤5°C - Rush Hour"
+    title: str = "Bike counter with rain"
 ) -> go.Figure:
     """
-    Three separate subplots per city with the bike counter dependent of rain/snow in mm.
-    Only rush hour (Morning 7-9, Evening 17-19).
-    
+    Subplots per city with bike counts vs rain/snow in mm.
+    Plots all time categories: Morning/Evening Rush, Weekday Non-Rush, Weekend.
+
     Args:
         data_dict: dict with {station_alias: DataFrame} of all stations
         cities: list of cities
-        title: plot titel
-        
+        title: plot title
+
     Returns:
-        Plotly Figure Objekt
+        Plotly Figure
     """
-    # Farben für Morning vs Evening Rush
+    # Default colors for known categories
     color_map = {
         'Morning Rush (7-9)': 'orange',
-        'Evening Rush (17-19)': 'blue'
+        'Evening Rush (17-19)': 'blue',
+        'Weekday Non-Rush': 'purple',
+        'Weekend': 'green'
     }
 
     fig = make_subplots(
@@ -735,33 +737,36 @@ def plot_bike_vs_rain_rush_hour_city(
     )
 
     for col, city in enumerate(cities, start=1):
-        # 🔹 City filter using alias
         city_lower = city.lower()
         city_stations = [alias for alias in data_dict.keys() if alias.lower().startswith(city_lower)]
         if not city_stations:
             continue
 
-        # 🔹 Combine DataFrames of all stations in the city
         city_df_list = [data_dict[alias].copy() for alias in city_stations]
         city_df = pd.concat(city_df_list, ignore_index=True)
         if city_df.empty:
             continue
 
-        # 🔹 Plot points with different colors for morning and evening rush
-        for rush_type in ['Morning Rush (7-9)', 'Evening Rush (17-19)']:
-            df_rush = city_df[city_df['time_category'] == rush_type]
-            if df_rush.empty:
+        # Get all categories present in the filtered data
+        categories = city_df['time_category'].unique()
+
+        for cat in categories:
+            df_cat = city_df[city_df['time_category'] == cat]
+            if df_cat.empty:
                 continue
 
             fig.add_trace(
                 go.Scatter(
-                    x=df_rush['rain'],
-                    y=df_rush['bike'],
+                    x=df_cat['rain'],
+                    y=df_cat['bike'],
                     mode='markers',
-                    name=rush_type if col == 1 else None,  # Legende nur einmal
-                    marker=dict(size=5, color=color_map[rush_type], opacity=0.8),
-                    hovertemplate="Rain: %{x} mm<br>Bikes: %{y}<br>Rush: %{customdata}",
-                    customdata=df_rush['time_category'],
+                    name=cat if col == 1 else None,  # only show legend in first subplot
+                    marker=dict(
+                        size=5,
+                        color=color_map.get(cat, 'gray'),  # default gray for unknown categories
+                        opacity=0.8
+                    ),
+                    customdata=df_cat['time_category'],
                     showlegend=(col == 1)
                 ),
                 row=1, col=col
@@ -780,35 +785,58 @@ def plot_bike_vs_rain_rush_hour_city(
 
     return fig
 
+
 @register_plot(
     "city_rain_share_boxplot",
-    "Boxplot showing the share of bike rides during rain per city (Rush Hour)"
+    "Boxplot showing the share of bike rides during rain per city (All Categories)"
 )
 def plot_city_rain_share(
-    df_city_rain: pd.DataFrame,  # DataFrame mit Spalten ["city", "rain_share"]
+    df_city_rain: pd.DataFrame,  # DataFrame with columns ["city", "rain_share", "time_category"]
+    categories: list | None = None,  # Which categories to include, None = all
     title: str = None
 ):
     """
-    Creates a boxplot of the rain share per city.
+    Creates a boxplot of the rain share per city for each time category.
 
     Args:
-        df_city_rain: DataFrame with columns ["city", "rain_share"]
+        df_city_rain: DataFrame with columns ["city", "rain_share", "time_category"]
+        categories: list of time categories to include (None = all)
         title: optional plot title
 
     Returns:
         plotly.graph_objects.Figure
     """
     if title is None:
-        title = "Rain share of bike counts per city (Rush Hour)"
+        title = "Rain share of bike counts per city (All Categories)"
+
+    df_plot = df_city_rain.copy()
+    
+    if categories is not None:
+        df_plot = df_plot[df_plot['time_category'].isin(categories)]
+
+    # Default color map for known categories
+    color_map = {
+        'Morning Rush (7-9)': 'orange',
+        'Evening Rush (17-19)': 'blue',
+        'Weekday Non-Rush': 'purple',
+        'Weekend': 'green'
+    }
 
     fig = px.box(
-        df_city_rain,
+        df_plot,
         x="city",
         y="rain_share",
+        color="time_category",  # Use time category for coloring
         points="all",
-        color="city",
-        labels={"city": "City", "rain_share": "Rain share of bike counts"},
+        labels={"city": "City", "rain_share": "Rain share of bike counts", "time_category": "Time Category"},
+        color_discrete_map=color_map,
         title=title
     )
-    fig.update_layout(showlegend=False, yaxis_tickformat=".0%")
+
+    fig.update_layout(
+        yaxis_tickformat=".0%",
+        height=500,
+    )
+
     return fig
+
