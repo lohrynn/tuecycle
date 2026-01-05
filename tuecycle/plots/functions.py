@@ -723,10 +723,10 @@ def plot_bike_vs_rain_rush_hour_city(
     """
     # Default colors for known categories
     color_map = {
-        'Morning Rush (7-9)': 'orange',
-        'Evening Rush (17-19)': 'blue',
-        'Weekday Non-Rush': 'purple',
-        'Weekend': 'green'
+        'Morning Rush (7-9)': COLORS['morning_rush'],
+        'Evening Rush (17-19)': COLORS['evening_rush'],
+        'Weekday Non-Rush': COLORS['non_rush'],
+        'Weekend': COLORS['weekend']
     }
 
     fig = make_subplots(
@@ -817,10 +817,10 @@ def plot_city_rain_share(
 
     # Default color map for known categories
     color_map = {
-        'Morning Rush (7-9)': 'orange',
-        'Evening Rush (17-19)': 'blue',
-        'Weekday Non-Rush': 'purple',
-        'Weekend': 'green'
+        'Morning Rush (7-9)': COLORS['morning_rush'],
+        'Evening Rush (17-19)': COLORS['evening_rush'],
+        'Weekday Non-Rush': COLORS['non_rush'],
+        'Weekend': COLORS['weekend']
     }
 
     fig = px.box(
