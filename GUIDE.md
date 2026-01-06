@@ -77,8 +77,20 @@ The CSV must have these columns:
 | Column | Description | Example |
 | ------ | ----------- | ------- |
 | `time` | ISO datetime | `2019-12-01T00:00` |
-| `temperature_2m (°C)` | Temperature in °C | `5.2` |
-| `precipitation (mm)` | Precipitation in mm | `0.5` |
+| `temperature_2m (°C)` | Temperature in °C | `5.2 = 5.2°C` |
+| `precipitation (mm)` | Precipitation in mm | `0.5 = 0.5mm` |
+| `cloud_cover (%)` | Total cloud cover as an area fraction | `5 = 5%` |
+| `wind_speed_10m (km/h)` | Wind speed at 10 meters above ground | `5 = 5km/h` |
+| `is_day ()` | Day or night | `0 = night, 1 = day` |
+
+
+
+When using get(), the columns are renamed as follows:
+- 'precipitation (mm)': 'rain', 
+- 'temperature_2m (°C)': 'temp',
+- 'cloud_cover (%)': 'clouds',
+- 'wind_speed_10m (km/h)': 'wind',
+- 'is_day ()': 'day'
 
 Optional columns (not currently used but can be kept):
 apparent_temperature (°C),rain (mm),snow_depth (m),snowfall (cm),weather_code (wmo code),cloud_cover (%),cloud_cover_high (%),cloud_cover_mid (%),cloud_cover_low (%),wind_speed_10m (km/h),wind_direction_100m (°),wind_direction_10m (°),wind_speed_100m (km/h),wind_gusts_10m (km/h),is_day (),sunshine_duration (s),pressure_msl (hPa),surface_pressure (hPa)

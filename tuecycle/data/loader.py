@@ -163,7 +163,12 @@ class DataManager:
         # Merge on datetime
         merged = pd.merge(
             counter_df[['datetime', 'channels_all']],
-            weather_df[['datetime', 'precipitation (mm)', 'temperature_2m (°C)']],
+            weather_df[['datetime', 
+                        'precipitation (mm)', 
+                        'temperature_2m (°C)',
+                        'cloud_cover (%)',
+                        'wind_speed_10m (km/h)',
+                        'is_day ()']],
             on='datetime',
             how='outer'
         ).sort_values('datetime')
@@ -180,10 +185,15 @@ class DataManager:
         # ]
         
         # Rename columns
-        merged = merged.rename(columns={'channels_all': 'bike', 'precipitation (mm)': 'rain', 'temperature_2m (°C)': 'temp'})
+        merged = merged.rename(columns={'channels_all': 'bike', 
+                                        'precipitation (mm)': 'rain', 
+                                        'temperature_2m (°C)': 'temp',
+                                        'cloud_cover (%)': 'clouds',
+                                        'wind_speed_10m (km/h)': 'wind',
+                                        'is_day ()': 'day'})
         
         # Ensure numeric types
-        merged[['bike', 'rain', 'temp']] = merged[['bike', 'rain', 'temp']].apply(
+        merged[['bike', 'rain', 'temp','clouds','wind','day']] = merged[['bike', 'rain', 'temp','clouds','wind','day']].apply(
             pd.to_numeric, errors='coerce'
         )
         
@@ -197,7 +207,7 @@ class DataManager:
             force_reload: If True, reload from CSVs even if cache exists.
             
         Returns:
-            DataFrame with columns: datetime, bike, rain, temp
+            DataFrame with columns: datetime, bike, rain, temp, clouds, wind, day
         """
         # Check in-memory cache first
         if station_alias in self._data_cache and not force_reload:
