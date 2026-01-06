@@ -115,19 +115,12 @@ STATIONS: Dict[str, Station] = {
         display_name="Heidelberg (Rohrbacher Straße)",
         color="#FB8072",
     ),
-    "heidelberg_schlierbacher": Station(
-        alias="heidelberg_schlierbacher",
-        station="heidelberg_schlierbacher",
-        counter_name="Schlierbacher Landstraße",
-        display_name="Heidelberg (Schlierbacher Landstraße)",
-        color="#FB8072",
-    ),
-    "heidelberg_theodor_heuss": Station(
-        alias="heidelberg_theodor_heuss",
+    "heidelberg_thedor_heuss": Station(
+        alias="heidelberg_thedor_heuss",
         station="heidelberg_theodorheussbruecke",
-        counter_name="Theodor-Heuss-Brücke",
-        display_name="Heidelberg (Theodor-Heuss-Brücke)",
-        color="#FB8072",
+        counter_name="Thedor-Heuss-Brücke Querschnitt",
+        display_name="Heidelberg (Thedor-Heuss-Brücke)",
+        color="#8DD3C7",
     ),
     "heidelberg_ziegelhaeuser": Station(
         alias="heidelberg_ziegelhaeuser",
@@ -311,34 +304,6 @@ STATIONS: Dict[str, Station] = {
         display_name="Mannheim (Luzenbergstr.)",
         color="#80B1D3",
     ),
-    "mannheim_b38": Station(
-        alias="mannheim_b38",
-        station="mannheim_b38",
-        counter_name="B38. RI. AUS",
-        display_name="Mannheim (B38. RI. AUS)",
-        color="#80B1D3",
-    ),
-    "mannheim_theodor_heuss_in": Station(
-        alias="mannheim_theodor_heuss_in",
-        station="mannheim_theodor_heuss_in",
-        counter_name="Theodor-Heuss-Anlage. RI. IN.",
-        display_name="Mannheim (Theodor-Heuss-Anlage IN)",
-        color="#80B1D3",
-    ),
-    "mannheim_theodor_heuss_aus": Station(
-        alias="mannheim_theodor_heuss_aus",
-        station="mannheim_theodor_heuss_aus",
-        counter_name="Theodor-Heuss-Anlage. RI. AUS",
-        display_name="Mannheim (Theodor-Heuss-Anlage AUS)",
-        color="#80B1D3",
-    ),
-    "mannheim_fernmeldeturm": Station(
-        alias="mannheim_fernmeldeturm",
-        station="mannheim_fernmeldeturm",
-        counter_name="Fernmeldeturm",
-        display_name="Mannheim (Fernmeldeturm)",
-        color="#80B1D3",
-    ),
     
     # Offenburg
     "offenburg_haupt": Station(
@@ -506,20 +471,6 @@ STATIONS: Dict[str, Station] = {
         station="tuebingen_steinlachallee",
         counter_name="Unterführung Steinlach/Karlstraße Südseite - Steinlachallee",
         display_name="Tübingen (Steinlach)",
-        color="#8DD3C7",
-    ),
-    "tuebingen_radbrueckemitte": Station(
-        alias="tuebingen_radbrueckemitte",
-        station="tuebingen_radbrueckemitte",
-        counter_name="Radbrücke Mitte - Wöhrdstraße",
-        display_name="Tübingen (Radbrücke Mitte)",
-        color="#8DD3C7",
-    ),
-    "tuebingen_radbrueckeost": Station(
-        alias="tuebingen_radbrueckeost",
-        station="tuebingen_radbrueckeost",
-        counter_name="Radbrücke Ost",
-        display_name="Tübingen (Radbrücke Ost)",
         color="#8DD3C7",
     ),
     
