@@ -206,3 +206,166 @@ def compute_hourly_stats(
         group_cols = ['hour'] + [c for c in group_cols if c != 'hour']
     
     return df.groupby(group_cols)[value_col].agg(['mean', 'std']).reset_index()
+
+
+def add_perceived_rainy(
+    df: pd.DataFrame,
+    rain_col: str = 'rain',
+    datetime_col: str = 'datetime',
+    rain_threshold: float = 0.1,
+    morning_hours: tuple[int, int] = (5, 9),
+    evening_hours: tuple[int, int] = (18, 23),
+) -> pd.DataFrame:
+    """Classify each day as 'perceived rainy' based on when rain occurred.
+    
+    A day is considered 'perceived rainy' if cyclists would anticipate rain
+    when making their commuting decision. This captures the idea that cyclists
+    can't cancel mid-ride, so the decision is made before departure based on:
+    
+    1. Rain the previous evening (18:00-23:00)
+    2. Rain in the early morning (5:00-9:00)
+    
+    This is more relevant than "did it rain at this exact hour?".
+    
+    Args:
+        df: DataFrame with datetime and rain columns.
+        rain_col: Name of the rain column (mm).
+        datetime_col: Name of the datetime column.
+        rain_threshold: Minimum rain (mm) to count as rainy.
+        morning_hours: Tuple of (start, end) hours for morning rain check.
+        evening_hours: Tuple of (start, end) hours for previous evening rain check.
+        
+    Returns:
+        DataFrame with added columns:
+            - date: The date (for grouping)
+            - morning_rain: Total rain in morning hours
+            - prev_evening_rain: Total rain in previous evening
+            - perceived_rainy: Boolean, True if morning or prev evening had rain
+            - rain_category: 'Perceived Dry' or 'Perceived Rainy'
+    """
+    df = df.copy()
+    
+    # Ensure datetime and hour columns exist
+    if datetime_col in df.columns:
+        dt = df[datetime_col]
+    else:
+        raise ValueError(f"Column '{datetime_col}' not found in DataFrame")
+    
+    if 'hour' not in df.columns:
+        df = add_time_features(df, datetime_col)
+    
+    df['date'] = dt.dt.date
+    
+    # Calculate morning rain for each day (rain during morning_hours)
+    morning_mask = (df['hour'] >= morning_hours[0]) & (df['hour'] <= morning_hours[1])
+    morning_rain = df[morning_mask].groupby('date')[rain_col].sum()
+    morning_rain.name = 'morning_rain'
+    
+    # Calculate previous evening rain (shift by 1 day)
+    evening_mask = (df['hour'] >= evening_hours[0]) & (df['hour'] <= evening_hours[1])
+    evening_rain = df[evening_mask].groupby('date')[rain_col].sum()
+    
+    # Shift evening rain to next day (it affects the next day's perception)
+    evening_rain_shifted = evening_rain.shift(1, fill_value=0)
+    evening_rain_shifted.name = 'prev_evening_rain'
+    
+    # Create a daily summary DataFrame
+    daily_rain = pd.DataFrame({
+        'morning_rain': morning_rain,
+        'prev_evening_rain': evening_rain_shifted
+    }).fillna(0)
+    
+    # Merge back to hourly data
+    df = df.merge(daily_rain, left_on='date', right_index=True, how='left')
+    df['morning_rain'] = df['morning_rain'].fillna(0)
+    df['prev_evening_rain'] = df['prev_evening_rain'].fillna(0)
+    
+    # Classify as perceived rainy
+    df['perceived_rainy'] = (
+        (df['morning_rain'] > rain_threshold) | 
+        (df['prev_evening_rain'] > rain_threshold)
+    )
+    
+    df['rain_category'] = df['perceived_rainy'].map({
+        True: 'Perceived Rainy',
+        False: 'Perceived Dry'
+    })
+    
+    return df
+
+
+def compute_rolling_baseline(
+    df: pd.DataFrame,
+    value_col: str = 'bike',
+    datetime_col: str = 'datetime',
+    window_days: int = 14,
+    by_hour: bool = True,
+    by_weekday_type: bool = True,
+) -> pd.DataFrame:
+    """Compute a rolling baseline for bike counts to account for seasonal variation.
+    
+    This computes a local time-window average, allowing to see deviations
+    that account for the natural seasonal fluctuation in cycling.
+    
+    For example, a rainy day in summer might still have more cyclists than
+    an average winter day, but fewer than the surrounding summer days.
+    
+    Args:
+        df: DataFrame with datetime and value columns.
+        value_col: Column to compute baseline for.
+        datetime_col: Name of the datetime column.
+        window_days: Size of the rolling window in days (default 14 = 2 weeks).
+        by_hour: If True, compute separate baselines for each hour of day.
+        by_weekday_type: If True, compute separate baselines for weekdays vs weekends.
+        
+    Returns:
+        DataFrame with added columns:
+            - rolling_baseline: The local average for this hour/weekday-type
+            - deviation_from_baseline: (value - baseline) / baseline * 100
+    """
+    df = df.copy()
+    
+    if 'hour' not in df.columns or 'is_weekend' not in df.columns:
+        df = add_time_features(df, datetime_col)
+    
+    df['date'] = df[datetime_col].dt.date
+    
+    # Build grouping key
+    group_cols = ['date']
+    if by_hour:
+        group_cols.append('hour')
+    if by_weekday_type:
+        group_cols.append('is_weekend')
+    
+    # For each unique combination of (hour, is_weekend), compute rolling mean
+    df = df.sort_values(datetime_col)
+    
+    # Create a daily average first (to smooth out hourly noise)
+    if by_hour and by_weekday_type:
+        # Group by date, hour, is_weekend and take mean
+        daily_hourly = df.groupby(['date', 'hour', 'is_weekend'])[value_col].mean().reset_index()
+        daily_hourly = daily_hourly.sort_values(['is_weekend', 'hour', 'date'])
+        
+        # Rolling mean within each (hour, is_weekend) group
+        daily_hourly['rolling_baseline'] = daily_hourly.groupby(['hour', 'is_weekend'])[value_col].transform(
+            lambda x: x.rolling(window=window_days, min_periods=3, center=True).mean()
+        )
+        
+        # Merge back
+        df = df.merge(
+            daily_hourly[['date', 'hour', 'is_weekend', 'rolling_baseline']],
+            on=['date', 'hour', 'is_weekend'],
+            how='left'
+        )
+    else:
+        # Simpler case: just rolling mean over all data
+        df['rolling_baseline'] = df[value_col].rolling(
+            window=window_days * 24, min_periods=24, center=True
+        ).mean()
+    
+    # Compute deviation as percentage
+    df['deviation_from_baseline'] = (
+        (df[value_col] - df['rolling_baseline']) / df['rolling_baseline'] * 100
+    ).replace([np.inf, -np.inf], np.nan)
+    
+    return df

@@ -139,6 +139,16 @@ class DataManager:
         df['datetime'] = pd.to_datetime(df['time'])
         df = df.drop_duplicates(subset='datetime', keep='first')
         
+        # Filter to requested date range (same as bike data filtering)
+        start_year, start_month, start_day = self.start_date
+        end_year, end_month, end_day = self.end_date
+        start_ts = pd.Timestamp(start_year, start_month, start_day, 0, 0)
+        end_ts = pd.Timestamp(end_year, end_month, end_day, 23, 0)
+        df = df[
+            (df['datetime'] >= start_ts) & 
+            (df['datetime'] <= end_ts)
+        ]
+        
         return df
     
     def _merge_bike_weather(self, station: Station, bike_df: pd.DataFrame) -> pd.DataFrame:
@@ -157,6 +167,17 @@ class DataManager:
             on='datetime',
             how='outer'
         ).sort_values('datetime')
+        
+        # Filter merged data to the requested date range
+        # This ensures we don't include extra weather data outside the date range
+        # start_year, start_month, start_day = self.start_date
+        # end_year, end_month, end_day = self.end_date
+        # start_ts = pd.Timestamp(start_year, start_month, start_day, 0, 0)
+        # end_ts = pd.Timestamp(end_year, end_month, end_day, 23, 0)
+        # merged = merged[
+        #     (merged['datetime'] >= start_ts) & 
+        #     (merged['datetime'] <= end_ts)
+        # ]
         
         # Rename columns
         merged = merged.rename(columns={'channels_all': 'bike', 'precipitation (mm)': 'rain', 'temperature_2m (°C)': 'temp'})

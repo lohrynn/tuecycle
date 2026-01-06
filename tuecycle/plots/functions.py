@@ -22,6 +22,8 @@ from tuecycle.utils.transforms import (
     classify_time_category,
     add_season,
     prepare_fft_data,
+    add_perceived_rainy,
+    compute_rolling_baseline,
 )
 
 
@@ -212,6 +214,8 @@ def plot_weekday_vs_weekend(
     )
     
     return fig
+
+
 
 
 # =============================================================================
@@ -811,4 +815,295 @@ def plot_city_rain_share(
         title=title
     )
     fig.update_layout(showlegend=False, yaxis_tickformat=".0%")
+    return fig
+
+
+# =============================================================================
+# Perceived Rainy Day Analysis
+# =============================================================================
+
+COLORS_RAIN = {
+    'perceived_dry': '#4ECDC4',       # Teal
+    'perceived_rainy': '#7B68EE',     # Medium slate blue  
+    'weekday_dry': '#2ECC71',         # Emerald green
+    'weekday_rainy': '#9B59B6',       # Amethyst purple
+    'weekend_dry': '#3498DB',         # Bright blue
+    'weekend_rainy': '#E74C3C',       # Alizarin red
+}
+
+
+@register_plot(
+    "perceived_rainy_hourly",
+    "Hourly bike pattern comparing perceived rainy vs dry days"
+)
+def plot_perceived_rainy_hourly(
+    df: pd.DataFrame,
+    title: str = "Hourly Pattern: Perceived Rainy vs Dry Days",
+    show_bands: bool = True,
+) -> go.Figure:
+    """Compare hourly bike patterns between perceived rainy and dry days.
+    
+    'Perceived rainy' captures days where cyclists would anticipate rain
+    when making their commuting decision (rain in morning or previous evening).
+    
+    Args:
+        df: DataFrame with datetime, bike, and rain columns.
+        title: Plot title.
+        show_bands: If True, show ±1 std deviation bands.
+        
+    Returns:
+        Plotly Figure with comparison of hourly patterns.
+    """
+    df = add_time_features(df)
+    df = add_perceived_rainy(df)
+    
+    fig = go.Figure()
+    
+    for category, color in [('Perceived Dry', COLORS_RAIN['perceived_dry']), 
+                             ('Perceived Rainy', COLORS_RAIN['perceived_rainy'])]:
+        cat_data = df[df['rain_category'] == category]
+        hourly_stats = cat_data.groupby('hour')['bike'].agg(['mean', 'std']).reset_index()
+        
+        # Mean line
+        fig.add_trace(go.Scatter(
+            x=hourly_stats['hour'],
+            y=hourly_stats['mean'],
+            mode='lines+markers',
+            name=category,
+            line=dict(color=color, width=3),
+            marker=dict(size=8)
+        ))
+        
+        # Std band
+        if show_bands and 'std' in hourly_stats.columns:
+            fig.add_trace(go.Scatter(
+                x=list(hourly_stats['hour']) + list(hourly_stats['hour'][::-1]),
+                y=list(hourly_stats['mean'] + hourly_stats['std']) + 
+                  list((hourly_stats['mean'] - hourly_stats['std'])[::-1]),
+                fill='toself',
+                fillcolor=color.replace(')', ', 0.2)').replace('rgb', 'rgba') if 'rgb' in color else f"rgba{tuple(list(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + [0.2])}",
+                line=dict(color='rgba(255,255,255,0)'),
+                name=f'{category} ±1σ',
+                showlegend=False,
+            ))
+    
+    fig.update_layout(
+        title=title,
+        xaxis_title='Hour of Day',
+        yaxis_title='Average Bike Count',
+        hovermode='x unified',
+        xaxis=dict(tickmode='linear', tick0=0, dtick=1),
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot(
+    "perceived_rainy_weekday_weekend",
+    "Hourly pattern by perceived rain, split by weekday/weekend"
+)
+def plot_perceived_rainy_weekday_weekend(
+    df: pd.DataFrame,
+    title: str = "Perceived Rainy Days: Weekday vs Weekend Hourly Pattern",
+) -> go.Figure:
+    """Compare hourly patterns for perceived rainy/dry days, split by weekday/weekend.
+    
+    Creates a 2x2 comparison:
+    - Weekday Dry vs Weekday Rainy
+    - Weekend Dry vs Weekend Rainy
+    
+    This helps understand how perceived rain affects commuting patterns
+    differently on workdays vs leisure days.
+    
+    Args:
+        df: DataFrame with datetime, bike, and rain columns.
+        title: Plot title.
+        
+    Returns:
+        Plotly Figure with subplots.
+    """
+    df = add_time_features(df)
+    df = add_perceived_rainy(df)
+    
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=['Weekdays (Mon-Fri)', 'Weekend (Sat-Sun)'],
+        shared_yaxes=True,
+        horizontal_spacing=0.08,
+    )
+    
+    categories = [
+        ('Perceived Dry', 'weekday_dry', False),
+        ('Perceived Rainy', 'weekday_rainy', False),
+        ('Perceived Dry', 'weekend_dry', True),
+        ('Perceived Rainy', 'weekend_rainy', True),
+    ]
+    
+    for rain_cat, color_key, is_weekend in categories:
+        cat_data = df[(df['rain_category'] == rain_cat) & (df['is_weekend'] == is_weekend)]
+        hourly = cat_data.groupby('hour')['bike'].mean().reset_index()
+        
+        col = 2 if is_weekend else 1
+        show_legend = not is_weekend  # Only show legend once
+        
+        fig.add_trace(
+            go.Scatter(
+                x=hourly['hour'],
+                y=hourly['bike'],
+                mode='lines+markers',
+                name=rain_cat,
+                line=dict(color=COLORS_RAIN[color_key], width=3),
+                marker=dict(size=6),
+                showlegend=show_legend,
+            ),
+            row=1, col=col
+        )
+    
+    fig.update_xaxes(title_text='Hour of Day', tickmode='linear', tick0=0, dtick=2, row=1, col=1)
+    fig.update_xaxes(title_text='Hour of Day', tickmode='linear', tick0=0, dtick=2, row=1, col=2)
+    fig.update_yaxes(title_text='Average Bike Count', row=1, col=1)
+    
+    fig.update_layout(
+        title=title,
+        hovermode='x unified',
+        legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99),
+        height=450,
+    )
+    
+    return fig
+
+
+@register_plot(
+    "perceived_rainy_reduction",
+    "Percentage reduction in bike counts on perceived rainy days by hour"
+)
+def plot_perceived_rainy_reduction(
+    df: pd.DataFrame,
+    title: str = "Bike Count Reduction on Perceived Rainy Days",
+) -> go.Figure:
+    """Show the percentage reduction in bike counts on perceived rainy days.
+    
+    For each hour, computes: (dry_count - rainy_count) / dry_count * 100
+    
+    Positive values indicate fewer cyclists on rainy days.
+    
+    Args:
+        df: DataFrame with datetime, bike, and rain columns.
+        title: Plot title.
+        
+    Returns:
+        Plotly Figure showing reduction percentage by hour.
+    """
+    df = add_time_features(df)
+    df = add_perceived_rainy(df)
+    
+    # Compute average by hour and rain category
+    hourly_avg = df.groupby(['hour', 'rain_category'])['bike'].mean().unstack()
+    
+    reduction_pct = (
+        (hourly_avg['Perceived Dry'] - hourly_avg['Perceived Rainy']) 
+        / hourly_avg['Perceived Dry'] * 100
+    )
+    
+    fig = go.Figure()
+    
+    # Weekday vs weekend reduction
+    weekday_data = df[~df['is_weekend']]
+    weekend_data = df[df['is_weekend']]
+    
+    for data, name, color in [
+        (weekday_data, 'Weekdays', COLORS['weekday']),
+        (weekend_data, 'Weekend', COLORS['weekend']),
+    ]:
+        hourly_avg = data.groupby(['hour', 'rain_category'])['bike'].mean().unstack()
+        if 'Perceived Dry' in hourly_avg.columns and 'Perceived Rainy' in hourly_avg.columns:
+            reduction = (
+                (hourly_avg['Perceived Dry'] - hourly_avg['Perceived Rainy']) 
+                / hourly_avg['Perceived Dry'] * 100
+            )
+            
+            fig.add_trace(go.Bar(
+                x=reduction.index,
+                y=reduction.values,
+                name=name,
+                marker_color=color,
+                opacity=0.8,
+            ))
+    
+    fig.add_hline(y=0, line_dash="dot", line_color="gray")
+    
+    fig.update_layout(
+        title=title + "<br><sup>Positive = fewer cyclists on rainy days</sup>",
+        xaxis_title='Hour of Day',
+        yaxis_title='Reduction in Bike Count [%]',
+        xaxis=dict(tickmode='linear', tick0=0, dtick=1),
+        barmode='group',
+        legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99),
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot(
+    "deviation_from_baseline",
+    "Bike count deviation from rolling baseline by rain category"
+)
+def plot_deviation_from_baseline(
+    df: pd.DataFrame,
+    title: str = "Deviation from Local Baseline: Rainy vs Dry Days",
+    window_days: int = 14,
+) -> go.Figure:
+    """Show how perceived rainy days deviate from a local rolling baseline.
+    
+    This accounts for seasonal variation by comparing each day to a local
+    time-window average rather than an annual average. A rainy summer day
+    is compared to other nearby summer days, not to winter days.
+    
+    Args:
+        df: DataFrame with datetime, bike, and rain columns.
+        title: Plot title.
+        window_days: Size of rolling window in days.
+        
+    Returns:
+        Plotly Figure showing deviation distributions.
+    """
+    df = add_time_features(df)
+    df = add_perceived_rainy(df)
+    df = compute_rolling_baseline(df, window_days=window_days)
+    
+    # Filter to daytime hours for cleaner analysis
+    df_day = filter_daytime(df, start_hour=7, end_hour=20)
+    df_day = df_day.dropna(subset=['deviation_from_baseline'])
+    
+    fig = go.Figure()
+    
+    for category, color in [
+        ('Perceived Dry', COLORS_RAIN['perceived_dry']),
+        ('Perceived Rainy', COLORS_RAIN['perceived_rainy']),
+    ]:
+        cat_data = df_day[df_day['rain_category'] == category]['deviation_from_baseline']
+        
+        fig.add_trace(go.Violin(
+            y=cat_data,
+            name=category,
+            box_visible=True,
+            meanline_visible=True,
+            fillcolor=color,
+            line_color=color,
+            opacity=0.7,
+        ))
+    
+    fig.add_hline(y=0, line_dash="dash", line_color="gray", 
+                  annotation_text="Baseline (local 2-week avg)")
+    
+    fig.update_layout(
+        title=title + f"<br><sup>Using {window_days}-day rolling window, daytime hours (7-20h)</sup>",
+        yaxis_title='Deviation from Baseline [%]',
+        showlegend=True,
+        height=500,
+    )
+    
     return fig

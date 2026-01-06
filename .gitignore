@@ -211,3 +211,4 @@ __marimo__/
 *.DS_Store*
 tmp
 eco-counter/all_cities/.DS_Store
+cache/

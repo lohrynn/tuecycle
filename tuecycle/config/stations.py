@@ -6,6 +6,7 @@ weather file city + station name.
 """
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Dict
 
 
@@ -310,9 +311,9 @@ STATIONS: Dict[str, Station] = {
         display_name="Mannheim (Luzenbergstr.)",
         color="#80B1D3",
     ),
-    "mannheim_B38": Station(
-        alias="mannheim_B38",
-        station="mannheim_B38",
+    "mannheim_b38": Station(
+        alias="mannheim_b38",
+        station="mannheim_b38",
         counter_name="B38. RI. AUS",
         display_name="Mannheim (B38. RI. AUS)",
         color="#80B1D3",
@@ -503,7 +504,7 @@ STATIONS: Dict[str, Station] = {
     "tuebingen_steinlach": Station(
         alias="tuebingen_steinlach",
         station="tuebingen_steinlachallee",
-        counter_name="Unterführung Steinlach/Karlstraße Südseite",
+        counter_name="Unterführung Steinlach/Karlstraße Südseite - Steinlachallee",
         display_name="Tübingen (Steinlach)",
         color="#8DD3C7",
     ),
@@ -574,3 +575,57 @@ def get_stations_by_city(city: str) -> list[Station]:
     city_lower = city_lower.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue")
     
     return [s for s in STATIONS.values() if s.station.lower().startswith(city_lower)]
+
+
+def list_stations_with_weather(base_path: str | Path = ".") -> list[str]:
+    """List station aliases that have both bike counter data AND weather data.
+    
+    Args:
+        base_path: Base path to the project directory containing weather_data/.
+                   Defaults to current directory.
+    
+    Returns:
+        List of station aliases that have weather data available.
+    """
+    base = Path(base_path)
+    weather_dir = base / "weather_data" / "hourly"
+    
+    if not weather_dir.exists():
+        return []
+    
+    available_stations = []
+    
+    for alias, station in STATIONS.items():
+        # Weather files are named: weather_{station}.csv
+        weather_file = weather_dir / f"weather_{station.station.lower()}.csv"
+        
+        if weather_file.exists():
+            available_stations.append(alias)
+    
+    return available_stations
+
+
+def check_station_data_availability(alias: str, base_path: str | Path = ".") -> dict[str, bool]:
+    """Check what data is available for a specific station.
+    
+    Args:
+        alias: Station alias to check.
+        base_path: Base path to the project directory.
+        
+    Returns:
+        Dictionary with keys 'registered', 'has_weather' indicating availability.
+    """
+    base = Path(base_path)
+    weather_dir = base / "weather_data" / "hourly"
+    
+    result = {
+        'registered': alias in STATIONS,
+        'has_weather': False,
+    }
+    
+    if result['registered']:
+        station = STATIONS[alias]
+        weather_file = weather_dir / f"weather_{station.station.lower()}.csv"
+        result['has_weather'] = weather_file.exists()
+    
+    return result

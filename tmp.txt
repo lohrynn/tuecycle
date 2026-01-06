@@ -1,0 +1,7 @@
+- Adapted analysis:
+    - Missing attribute name of `Station`
+- mannheim b38 key must be lower case
+- Configuration cell to analysis
+- We are missing many weather data points
+- Improved plotting
+- Fixed data range stuff for weather in loader.py

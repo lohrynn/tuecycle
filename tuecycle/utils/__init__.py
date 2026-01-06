@@ -6,6 +6,8 @@ from tuecycle.utils.transforms import (
     compute_deviations,
     classify_time_category,
     add_season,
+    add_perceived_rainy,
+    compute_rolling_baseline,
 )
 
 __all__ = [
@@ -14,4 +16,6 @@ __all__ = [
     "compute_deviations",
     "classify_time_category",
     "add_season",
+    "add_perceived_rainy",
+    "compute_rolling_baseline",
 ]
