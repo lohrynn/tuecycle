@@ -86,11 +86,11 @@ The CSV must have these columns:
 
 
 When using get(), the columns are renamed as follows:
-- 'precipitation (mm)': 'rain', 
-- 'temperature_2m (°C)': 'temp',
-- 'cloud_cover (%)': 'clouds',
-- 'wind_speed_10m (km/h)': 'wind',
-- 'is_day ()': 'day'
+- `precipitation (mm)`: rain`, 
+- `temperature_2m (°C)`: `temp`,
+- `cloud_cover (%)`: `clouds`,
+- `wind_speed_10m (km/h)`: `wind`,
+- `is_day ()`: `day`
 
 Optional columns (not currently used but can be kept):
 apparent_temperature (°C),rain (mm),snow_depth (m),snowfall (cm),weather_code (wmo code),cloud_cover (%),cloud_cover_high (%),cloud_cover_mid (%),cloud_cover_low (%),wind_speed_10m (km/h),wind_direction_100m (°),wind_direction_10m (°),wind_speed_100m (km/h),wind_gusts_10m (km/h),is_day (),sunshine_duration (s),pressure_msl (hPa),surface_pressure (hPa)
