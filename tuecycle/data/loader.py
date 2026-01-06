@@ -124,12 +124,12 @@ class DataManager:
         
         return df_hourly.sort_values('iso_timestamp').reset_index(drop=True)
     
-    def _load_weather_data(self, station: str) -> pd.DataFrame:
+    def _load_weather_data(self, station_alias: str) -> pd.DataFrame:
         """Load weather data for a station."""
         
         weather_file = (
             self.base_path / 
-            f"weather_data/hourly/weather_{station.lower()}.csv"
+            f"weather_data/hourly/weather_{station_alias.lower()}.csv"
         )
         
         if not weather_file.exists():
@@ -158,7 +158,7 @@ class DataManager:
         counter_df = counter_df.rename(columns={'iso_timestamp': 'datetime'})
         
         # Load weather for this city
-        weather_df = self._load_weather_data(station.station)
+        weather_df = self._load_weather_data(station.station_alias)
         
         # Merge on datetime
         merged = pd.merge(

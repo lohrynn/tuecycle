@@ -31,8 +31,7 @@ Edit `tuecycle/config/stations.py` and add a new entry to the `STATIONS` diction
 
 ```python
 STATIONS["freiburg_wiwili"] = Station(
-    alias="freiburg_wiwili",                # Short identifier (used in code)
-    station="freiburg_wiwilibruecke",       # Must match weather file name!
+    alias="freiburg_wiwili",                # Short identifier matching the weather file (used in code)
     counter_name="Wiwilibrücke",            # Exact name from CSV
     display_name="Freiburg (Wiwilibrücke)", # Human-readable for plots
     color="#FDB462",                        # Hex color for multi-station plots
@@ -41,7 +40,7 @@ STATIONS["freiburg_wiwili"] = Station(
 
 ### Step 3: Ensure Weather Data Exists
 
-The `station` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
+The `alias` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
 
 ### Step 4: Test
 
@@ -65,10 +64,10 @@ You can obtain hourly weather data from [Open-Meteo](https://open-meteo.com/en/d
 Weather files must be placed in `weather_data/hourly/` with this naming convention:
 
 ```shell
-weather_{city}_{station}.csv
+weather_{city}_{station_alias}.csv
 ```
 
-Example: `weather_freiburg_wiwilibruecke.csv`
+Example: `weather_freiburg_wiwili.csv`
 
 ### Required Columns
 
