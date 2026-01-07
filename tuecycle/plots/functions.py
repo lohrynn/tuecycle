@@ -567,15 +567,28 @@ def plot_city_comparison_hourly(
     """Compare average hourly patterns across multiple stations.
     
     Args:
-        data_dict: Dictionary mapping station alias to DataFrame.
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
         title: Plot title.
     """
     from tuecycle.config.stations import get_station
     
+    # Default color palette for city aggregates
+    default_colors = ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3',
+                      '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9', '#BC80BD']
+    
     fig = go.Figure()
     
-    for alias, df in data_dict.items():
-        station = get_station(alias)
+    for i, (alias, df) in enumerate(data_dict.items()):
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+            color = station.color
+        except KeyError:
+            display_name = alias
+            color = default_colors[i % len(default_colors)]
+        
         df_copy = add_time_features(df)
         hourly_avg = df_copy.groupby('hour')['bike'].mean().reset_index()
         
@@ -583,8 +596,8 @@ def plot_city_comparison_hourly(
             x=hourly_avg['hour'],
             y=hourly_avg['bike'],
             mode='lines+markers',
-            name=station.display_name,
-            line=dict(color=station.color, width=3),
+            name=display_name,
+            line=dict(color=color, width=3),
             marker=dict(size=8)
         ))
     
@@ -609,15 +622,28 @@ def plot_city_comparison_monthly(
     """Compare monthly patterns across stations, normalized to percentage of max.
     
     Args:
-        data_dict: Dictionary mapping station alias to DataFrame.
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
         title: Plot title.
     """
     from tuecycle.config.stations import get_station
     
+    # Default color palette for city aggregates
+    default_colors = ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3',
+                      '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9', '#BC80BD']
+    
     fig = go.Figure()
     
-    for alias, df in data_dict.items():
-        station = get_station(alias)
+    for i, (alias, df) in enumerate(data_dict.items()):
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+            color = station.color
+        except KeyError:
+            display_name = alias
+            color = default_colors[i % len(default_colors)]
+        
         df_copy = add_time_features(df)
         monthly_avg = df_copy.groupby('year_month')['bike'].mean()
         monthly_norm = monthly_avg / monthly_avg.max() * 100
@@ -626,8 +652,8 @@ def plot_city_comparison_monthly(
             x=monthly_norm.index,
             y=monthly_norm.values,
             mode='lines+markers',
-            name=station.display_name,
-            line=dict(color=station.color, width=3),
+            name=display_name,
+            line=dict(color=color, width=3),
             marker=dict(size=8)
         ))
     
@@ -652,7 +678,8 @@ def plot_winter_summer_ratio(
     """Plot winter/summer ratio for each hour across multiple stations.
     
     Args:
-        data_dict: Dictionary mapping station alias to DataFrame.
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
         title: Plot title.
     """
     from tuecycle.config.stations import get_station
@@ -660,10 +687,22 @@ def plot_winter_summer_ratio(
     winter_months = [11, 12, 1, 2]
     summer_months = [5, 6, 7, 8]
     
+    # Default color palette for city aggregates
+    default_colors = ['#8DD3C7', '#FFFFB3', '#BEBADA', '#FB8072', '#80B1D3',
+                      '#FDB462', '#B3DE69', '#FCCDE5', '#D9D9D9', '#BC80BD']
+    
     fig = go.Figure()
     
-    for alias, df in data_dict.items():
-        station = get_station(alias)
+    for i, (alias, df) in enumerate(data_dict.items()):
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+            color = station.color
+        except KeyError:
+            display_name = alias
+            color = default_colors[i % len(default_colors)]
+        
         df_copy = add_time_features(df)
         
         winter_data = df_copy[df_copy['month'].isin(winter_months)]
@@ -678,8 +717,8 @@ def plot_winter_summer_ratio(
             x=ratio.index,
             y=ratio.values,
             mode='lines+markers',
-            name=station.display_name,
-            line=dict(color=station.color, width=3),
+            name=display_name,
+            line=dict(color=color, width=3),
             marker=dict(size=8)
         ))
     
@@ -1135,3 +1174,689 @@ def plot_deviation_from_baseline(
     )
     
     return fig
+
+
+# =============================================================================
+# Weather Composite Index and Elasticity Plots
+# =============================================================================
+
+@register_plot("weather_index_scatter", "Scatter plot of bike counts vs weather index")
+def plot_weather_index_scatter(
+    df: pd.DataFrame,
+    title: str = "Bike Count vs Weather Index",
+    hour_range: tuple[int, int] | None = (6, 22),
+) -> go.Figure:
+    """Scatter plot showing relationship between weather index and bike counts.
+    
+    The weather index ranges from 0 (best weather) to 1 (worst weather),
+    based on the composite index from Goldmann & Wessel (2021).
+    
+    Args:
+        df: DataFrame with bike and weather_index columns.
+        title: Plot title.
+        hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
+                   Default is (6, 22) for daytime hours.
+        
+    Returns:
+        Plotly Figure with scatter plot and trendline.
+    """
+    from tuecycle.utils.weather import add_weather_index, estimate_city_elasticity
+    
+    df = df.copy()
+    df = add_time_features(df)
+    
+    # Calculate weather index if not present
+    if 'weather_index' not in df.columns:
+        try:
+            df = add_weather_index(df)
+        except ValueError as e:
+            # If required weather columns are missing, return empty figure
+            fig = go.Figure()
+            fig.add_annotation(
+                text=f"Cannot calculate weather index: {e}",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, showarrow=False
+            )
+            return fig
+    
+    if hour_range is not None:
+        df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
+        time_label = f" ({hour_range[0]}-{hour_range[1]}h)"
+    else:
+        df_clean = df
+        time_label = ""
+    
+    df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
+    
+    # Calculate elasticity
+    elasticity_result = estimate_city_elasticity(df_clean)
+    
+    fig = go.Figure()
+    
+    # Add scatter with density coloring
+    fig.add_trace(go.Histogram2dContour(
+        x=df_clean['weather_index'],
+        y=df_clean['bike'],
+        colorscale='YlOrRd',
+        showscale=True,
+        colorbar=dict(title='Density'),
+        contours=dict(
+            showlines=False,
+        ),
+        name='Density',
+    ))
+    
+    # Add binned mean line
+    bins = pd.cut(df_clean['weather_index'], bins=20)
+    avg = df_clean.groupby(bins, observed=True)['bike'].mean()
+    bin_x = [interval.mid for interval in avg.index]
+    
+    fig.add_trace(go.Scatter(
+        x=bin_x,
+        y=avg.values,
+        mode='lines+markers',
+        name='Mean Bike Count',
+        line=dict(color='black', width=3),
+        marker=dict(size=8, color='white', line=dict(color='black', width=2)),
+    ))
+    
+    # Add Q1 and Q3 reference lines
+    q1 = df_clean['weather_index'].quantile(0.25)
+    q3 = df_clean['weather_index'].quantile(0.75)
+    
+    fig.add_vline(x=q1, line_dash="dash", line_color="green",
+                  annotation_text="Q1 (Good)", annotation_position="top")
+    fig.add_vline(x=q3, line_dash="dash", line_color="red",
+                  annotation_text="Q3 (Bad)", annotation_position="top")
+    
+    elasticity = elasticity_result['elasticity']
+    r2 = elasticity_result['r_squared']
+    
+    fig.update_layout(
+        title=f"{title}{time_label}<br><sup>Weather Elasticity: {elasticity:.1f}% (Q1→Q3), R²={r2:.3f}</sup>",
+        xaxis_title='Weather Index (0=Best, 1=Worst)',
+        yaxis_title='Bike Count',
+        legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99),
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot("weather_quartile_boxplot", "Box plot of bike counts by weather quartile")
+def plot_weather_quartile_boxplot(
+    df: pd.DataFrame,
+    title: str = "Bike Counts by Weather Quality",
+    hour_range: tuple[int, int] | None = (6, 22),
+) -> go.Figure:
+    """Box plot comparing bike counts across weather quartiles.
+    
+    Divides the weather index into quartiles (Q1=best, Q4=worst) and shows
+    the distribution of bike counts in each quartile.
+    
+    Args:
+        df: DataFrame with bike counts and weather data.
+        title: Plot title.
+        hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
+                   Default is (6, 22) for daytime hours.
+        
+    Returns:
+        Plotly Figure with box plots.
+    """
+    from tuecycle.utils.weather import add_weather_index, add_weather_quartile
+    
+    df = df.copy()
+    df = add_time_features(df)
+    
+    # Calculate weather index if not present
+    if 'weather_index' not in df.columns:
+        try:
+            df = add_weather_index(df)
+        except ValueError as e:
+            fig = go.Figure()
+            fig.add_annotation(
+                text=f"Cannot calculate weather index: {e}",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, showarrow=False
+            )
+            return fig
+    
+    if hour_range is not None:
+        df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
+        time_label = f" ({hour_range[0]}-{hour_range[1]}h)"
+    else:
+        df_clean = df
+        time_label = ""
+    
+    df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
+    df_clean = add_weather_quartile(df_clean)
+    
+    # Calculate mean per quartile for annotation
+    quartile_means = df_clean.groupby('weather_quartile', observed=True)['bike'].mean()
+    
+    # Colors from good (green) to bad (red)
+    colors = ['#2ECC71', '#F1C40F', '#E67E22', '#E74C3C']
+    
+    fig = go.Figure()
+    
+    for i, quartile in enumerate(['Q1 (Best)', 'Q2', 'Q3', 'Q4 (Worst)']):
+        quartile_data = df_clean[df_clean['weather_quartile'] == quartile]['bike']
+        if len(quartile_data) > 0:
+            fig.add_trace(go.Box(
+                y=quartile_data,
+                name=quartile,
+                marker_color=colors[i],
+                boxmean='sd',
+            ))
+    
+    # Calculate percent change from Q1 to Q4
+    if 'Q1 (Best)' in quartile_means.index and 'Q4 (Worst)' in quartile_means.index:
+        q1_mean = quartile_means['Q1 (Best)']
+        q4_mean = quartile_means['Q4 (Worst)']
+        pct_change = (q4_mean - q1_mean) / q1_mean * 100
+        subtitle = f"Change Q1→Q4: {pct_change:.1f}%"
+    else:
+        subtitle = ""
+    
+    fig.update_layout(
+        title=f"{title}{time_label}<br><sup>{subtitle}</sup>",
+        yaxis_title='Bike Count',
+        xaxis_title='Weather Quartile',
+        showlegend=False,
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot("city_elasticity_comparison", "Compare weather elasticity across cities")
+def plot_city_elasticity_comparison(
+    data_dict: dict,
+    title: str = "Weather Elasticity by City",
+    hour_range: tuple[int, int] | None = (6, 22),
+) -> go.Figure:
+    """Bar chart comparing weather elasticity across multiple stations.
+    
+    Shows how different cities respond to weather changes. Lower (more negative)
+    elasticity indicates cyclists who give up easily in bad weather. Values
+    closer to zero indicate more resilient cyclists.
+    
+    Args:
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
+        title: Plot title.
+        hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
+                   Default is (6, 22) for daytime hours.
+        
+    Returns:
+        Plotly Figure with bar chart.
+    """
+    from tuecycle.config.stations import get_station
+    from tuecycle.utils.weather import add_weather_index, estimate_city_elasticity
+    
+    results = []
+    
+    for alias, df in data_dict.items():
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+            color = station.color
+        except KeyError:
+            display_name = alias
+            color = "#8DD3C7"  # Default color
+        
+        df = df.copy()
+        df = add_time_features(df)
+        
+        # Calculate weather index if not present
+        if 'weather_index' not in df.columns:
+            try:
+                df = add_weather_index(df)
+            except ValueError:
+                continue
+        
+        if hour_range is not None:
+            df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
+        else:
+            df_clean = df
+        
+        # Estimate elasticity
+        elasticity_result = estimate_city_elasticity(df_clean)
+        
+        if not np.isnan(elasticity_result['elasticity']):
+            results.append({
+                'city': display_name,
+                'alias': alias,
+                'elasticity': elasticity_result['elasticity'],
+                'r_squared': elasticity_result['r_squared'],
+                'n_obs': elasticity_result['n_obs'],
+                'pvalue': elasticity_result['pvalue'],
+                'color': color,
+            })
+    
+    if not results:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="No valid data for elasticity calculation",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False
+        )
+        return fig
+    
+    # Sort by elasticity (most resilient first = closest to 0)
+    results_df = pd.DataFrame(results).sort_values('elasticity', ascending=False)
+    
+    # Color by elasticity: green (resilient) to red (sensitive)
+    # Remember: elasticity is negative, so -5% is more resilient than -30%
+    elasticities = results_df['elasticity']
+    min_e, max_e = elasticities.min(), elasticities.max()  # min is most negative (worst)
+    
+    # Normalize to [0, 1] for color scale
+    if max_e != min_e:
+        # Normalize so that most negative = 0, closest to zero = 1
+        normalized = (elasticities - min_e) / (max_e - min_e)
+        # Invert so resilient (close to 0) = 0 (green), sensitive (negative) = 1 (red)
+        normalized = 1 - normalized
+    else:
+        normalized = [0.5] * len(elasticities)
+    
+    # Create color gradient (green = 0 = resilient, red = 1 = sensitive)
+    colors = [f'rgb({int(255*n)}, {int(255*(1-n))}, 50)' for n in normalized]
+    
+    fig = go.Figure()
+    
+    # Add significance markers
+    sig_markers = ['***' if r['pvalue'] < 0.001 else 
+                   '**' if r['pvalue'] < 0.01 else 
+                   '*' if r['pvalue'] < 0.05 else '' 
+                   for _, r in results_df.iterrows()]
+    
+    fig.add_trace(go.Bar(
+        x=results_df['city'],
+        y=results_df['elasticity'],
+        marker_color=colors,
+        text=[f"{e:.1f}%{s}" for e, s in zip(results_df['elasticity'], sig_markers)],
+        textposition='outside',
+        hovertemplate=(
+            '<b>%{x}</b><br>'
+            'Elasticity: %{y:.2f}%<br>'
+            'R²: %{customdata[0]:.3f}<br>'
+            'Observations: %{customdata[1]:,}<br>'
+            'P-value: %{customdata[2]:.2e}<extra></extra>'
+        ),
+        customdata=results_df[['r_squared', 'n_obs', 'pvalue']].values,
+    ))
+    
+    fig.add_hline(y=0, line_dash="dash", line_color="gray")
+    
+    time_label = f" ({hour_range[0]}-{hour_range[1]}h)" if hour_range is not None else ""
+    fig.update_layout(
+        title=(
+            f"{title}{time_label}<br>"
+            "<sup>More negative = cyclists avoid bad weather | Closer to 0 = resilient cyclists</sup>"
+        ),
+        xaxis_title='',
+        yaxis_title='Weather Elasticity [%]<br>(Change in ridership: Q1→Q3 weather)',
+        xaxis_tickangle=-45,
+        showlegend=False,
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot("weather_index_hourly", "Hourly pattern by weather quality")
+def plot_weather_index_hourly(
+    df: pd.DataFrame,
+    title: str = "Hourly Pattern by Weather Quality",
+) -> go.Figure:
+    """Compare hourly bike patterns between good and bad weather.
+    
+    Splits data into weather quartiles and shows how the hourly pattern
+    differs between Q1 (best weather) and Q4 (worst weather).
+    
+    Args:
+        df: DataFrame with bike counts and weather data.
+        title: Plot title.
+        
+    Returns:
+        Plotly Figure with hourly comparison.
+    """
+    from tuecycle.utils.weather import add_weather_index, add_weather_quartile
+    
+    df = df.copy()
+    df = add_time_features(df)
+    
+    # Calculate weather index if not present
+    if 'weather_index' not in df.columns:
+        try:
+            df = add_weather_index(df)
+        except ValueError as e:
+            fig = go.Figure()
+            fig.add_annotation(
+                text=f"Cannot calculate weather index: {e}",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, showarrow=False
+            )
+            return fig
+    
+    df_clean = df.dropna(subset=['bike', 'weather_index'])
+    df_clean = add_weather_quartile(df_clean)
+    
+    # Colors from good (green) to bad (red)
+    quartile_styles = {
+        'Q1 (Best)': dict(color='#2ECC71', width=3),
+        'Q2': dict(color='#F1C40F', width=2, dash='dot'),
+        'Q3': dict(color='#E67E22', width=2, dash='dot'),
+        'Q4 (Worst)': dict(color='#E74C3C', width=3),
+    }
+    
+    fig = go.Figure()
+    
+    for quartile, style in quartile_styles.items():
+        quartile_data = df_clean[df_clean['weather_quartile'] == quartile]
+        hourly_avg = quartile_data.groupby('hour')['bike'].mean().reset_index()
+        
+        fig.add_trace(go.Scatter(
+            x=hourly_avg['hour'],
+            y=hourly_avg['bike'],
+            mode='lines+markers',
+            name=quartile,
+            line=style,
+            marker=dict(size=6),
+        ))
+    
+    fig.update_layout(
+        title=title,
+        xaxis_title='Hour of Day',
+        yaxis_title='Average Bike Count',
+        hovermode='x unified',
+        xaxis=dict(tickmode='linear', tick0=0, dtick=1),
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
+        height=500,
+    )
+    
+    return fig
+
+
+@register_plot("city_weather_sensitivity_heatmap", "Heatmap of hourly weather sensitivity by city")
+def plot_city_weather_sensitivity_heatmap(
+    data_dict: dict,
+    title: str = "Weather Sensitivity by Hour and City",
+    hour_range: tuple[int, int] | None = (6, 22),
+) -> go.Figure:
+    """Heatmap showing how weather sensitivity varies by hour across cities.
+    
+    For each city and hour, calculates the absolute difference (in standard deviations)
+    in bike counts between Q1 (best) and Q4 (worst) weather conditions.
+    
+    For z-scored city aggregates, the values represent standard deviations of change.
+    Negative values indicate cycling decreases in bad weather (expected behavior).
+    
+    Args:
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
+        title: Plot title.
+        hour_range: Tuple of (start_hour, end_hour) to display, or None for all hours.
+                   Default is (6, 22) for daytime hours.
+        
+    Returns:
+        Plotly Figure with heatmap.
+    """
+    from tuecycle.config.stations import get_station
+    from tuecycle.utils.weather import add_weather_index, add_weather_quartile
+    
+    results = {}
+    
+    for alias, df in data_dict.items():
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+        except KeyError:
+            display_name = alias
+        
+        df = df.copy()
+        df = add_time_features(df)
+        
+        # Calculate weather index if not present
+        if 'weather_index' not in df.columns:
+            try:
+                df = add_weather_index(df)
+            except ValueError:
+                continue
+        
+        df_clean = df.dropna(subset=['bike', 'weather_index'])
+        df_clean = add_weather_quartile(df_clean)
+        
+        # Calculate hourly sensitivity as absolute difference (Q4 - Q1)
+        # For z-scored data, this represents standard deviations of change
+        hourly_sensitivity = []
+        for hour in range(24):
+            hour_data = df_clean[df_clean['hour'] == hour]
+            q1_mean = hour_data[hour_data['weather_quartile'] == 'Q1 (Best)']['bike'].mean()
+            q4_mean = hour_data[hour_data['weather_quartile'] == 'Q4 (Worst)']['bike'].mean()
+            
+            # Absolute difference: negative means drop in bad weather
+            if not np.isnan(q1_mean) and not np.isnan(q4_mean):
+                sensitivity = q4_mean - q1_mean
+            else:
+                sensitivity = np.nan
+            hourly_sensitivity.append(sensitivity)
+        
+        results[display_name] = hourly_sensitivity
+    
+    if not results:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="No valid data for sensitivity calculation",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False
+        )
+        return fig
+    
+    # Create DataFrame for heatmap
+    heatmap_df = pd.DataFrame(results).T
+    heatmap_df.columns = list(range(24))
+    
+    if hour_range is not None:
+        heatmap_df = heatmap_df[[h for h in range(hour_range[0], hour_range[1] + 1)]]
+        time_label = f" ({hour_range[0]}-{hour_range[1]}h)"
+    else:
+        time_label = ""
+    
+    # Sort by average sensitivity (most resilient first = least negative)
+    heatmap_df['avg'] = heatmap_df.mean(axis=1)
+    heatmap_df = heatmap_df.sort_values('avg', ascending=False)
+    heatmap_df = heatmap_df.drop('avg', axis=1)
+    
+    fig = go.Figure(data=go.Heatmap(
+        z=heatmap_df.values,
+        x=heatmap_df.columns,
+        y=heatmap_df.index,
+        colorscale='RdYlGn',  # Red (negative/sensitive) to Green (positive/less drop)
+        zmid=0,
+        colorbar=dict(title='Δ (SD)'),
+        hovertemplate=(
+            'City: %{y}<br>'
+            'Hour: %{x}<br>'
+            'Change: %{z:.2f} SD<extra></extra>'
+        ),
+    ))
+    
+    fig.update_layout(
+        title=f"{title}{time_label}<br><sup>Difference in bike counts (standard deviations): Q4 (worst) - Q1 (best) weather</sup>",
+        xaxis_title='Hour of Day',
+        yaxis_title='',
+        xaxis=dict(tickmode='linear', tick0=0, dtick=1),
+        height=max(400, 50 * len(heatmap_df)),
+    )
+    
+    return fig
+
+
+@register_plot("city_resilience_ranking", "Ranked comparison of city weather resilience")
+def plot_city_resilience_ranking(
+    data_dict: dict,
+    title: str = "City Weather Resilience Ranking",
+    hour_range: tuple[int, int] | None = (6, 22),
+) -> go.Figure:
+    """
+    Horizontal bar chart ranking cities by their weather resilience.
+    
+    Uses multiple metrics to provide a comprehensive view:
+    - Weather elasticity (Q1→Q3 change)
+    - Q1 to Q4 percentage drop
+    
+    Args:
+        data_dict: Dictionary mapping station alias (or city name) to DataFrame.
+                   Keys can be station aliases or custom labels for city aggregates.
+        title: Plot title.
+        hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
+                   Default is (6, 22) for daytime hours.
+        
+    Returns:
+        Plotly Figure with horizontal bar chart and metrics.
+    """
+    from tuecycle.config.stations import get_station
+    from tuecycle.utils.weather import add_weather_index, add_weather_quartile, estimate_city_elasticity
+    
+    results = []
+    
+    for alias, df in data_dict.items():
+        # Try to get station info, fall back to using alias as display name
+        try:
+            station = get_station(alias)
+            display_name = station.display_name
+            color = station.color
+        except KeyError:
+            display_name = alias
+            color = "#8DD3C7"  # Default color
+        
+        df = df.copy()
+        df = add_time_features(df)
+        
+        # Calculate weather index if not present
+        if 'weather_index' not in df.columns:
+            try:
+                df = add_weather_index(df)
+            except ValueError:
+                continue
+        
+        if hour_range is not None:
+            df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
+        else:
+            df_clean = df
+        
+        df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
+        df_clean = add_weather_quartile(df_clean)
+        
+        # Calculate elasticity
+        elasticity_result = estimate_city_elasticity(df_clean)
+        
+        # Calculate Q1 to Q4 drop
+        q1_mean = df_clean[df_clean['weather_quartile'] == 'Q1 (Best)']['bike'].mean()
+        q4_mean = df_clean[df_clean['weather_quartile'] == 'Q4 (Worst)']['bike'].mean()
+        
+        if q1_mean > 0 and not np.isnan(q1_mean) and not np.isnan(q4_mean):
+            q1_q4_drop = (q4_mean - q1_mean) / q1_mean * 100
+        else:
+            q1_q4_drop = np.nan
+        
+        if not np.isnan(elasticity_result['elasticity']):
+            results.append({
+                'city': display_name,
+                'alias': alias,
+                'elasticity': elasticity_result['elasticity'],
+                'q1_q4_drop': q1_q4_drop,
+                'q1_mean': q1_mean,
+                'q4_mean': q4_mean,
+                'n_obs': elasticity_result['n_obs'],
+                'color': color,
+            })
+    
+    if not results:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="No valid data for resilience ranking",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False
+        )
+        return fig
+    
+    # Sort by elasticity (most resilient = closest to 0 = first)
+    results_df = pd.DataFrame(results).sort_values('elasticity', ascending=False)
+    
+    # Create color scale based on elasticity
+    # Remember: elasticity is negative, so -5% is more resilient than -30%
+    elasticities = results_df['elasticity']
+    min_e, max_e = elasticities.min(), elasticities.max()  # min is most negative (worst)
+    
+    if max_e != min_e:
+        # Normalize so that most negative = 0, closest to zero = 1
+        normalized = (elasticities - min_e) / (max_e - min_e)
+        # Now invert so resilient (close to 0) = 0 (green), sensitive (negative) = 1 (red)
+        normalized = 1 - normalized
+    else:
+        normalized = [0.5] * len(elasticities)
+    
+    # Green (resilient, normalized=0) to Red (sensitive, normalized=1)
+    colors = [f'rgb({int(200*n + 50)}, {int(200*(1-n) + 50)}, 50)' for n in normalized]
+    
+    fig = make_subplots(
+        rows=1, cols=2,
+        column_widths=[0.6, 0.4],
+        subplot_titles=('Weather Elasticity (Q1→Q3)', 'Q1 vs Q4 Drop'),
+        horizontal_spacing=0.15,
+    )
+    
+    # Elasticity bars
+    fig.add_trace(
+        go.Bar(
+            y=results_df['city'],
+            x=results_df['elasticity'],
+            orientation='h',
+            marker_color=colors,
+            text=[f"{e:.1f}%" for e in results_df['elasticity']],
+            textposition='outside',
+            name='Elasticity',
+            showlegend=False,
+        ),
+        row=1, col=1
+    )
+    
+    # Q1 vs Q4 drop bars  
+    fig.add_trace(
+        go.Bar(
+            y=results_df['city'],
+            x=results_df['q1_q4_drop'],
+            orientation='h',
+            marker_color=colors,
+            text=[f"{d:.1f}%" for d in results_df['q1_q4_drop']],
+            textposition='outside',
+            name='Q1→Q4 Drop',
+            showlegend=False,
+        ),
+        row=1, col=2
+    )
+    
+    fig.add_vline(x=0, line_dash="dash", line_color="gray", row=1, col=1)
+    fig.add_vline(x=0, line_dash="dash", line_color="gray", row=1, col=2)
+    
+    time_label = f" ({hour_range[0]}-{hour_range[1]}h)" if hour_range is not None else ""
+    fig.update_layout(
+        title=(
+            f"{title}{time_label}<br>"
+            "<sup>🟢 Top = Most resilient (weather has less impact) | "
+            "🔴 Bottom = Most sensitive (cyclists avoid bad weather)</sup>"
+        ),
+        height=max(400, 40 * len(results_df)),
+        showlegend=False,
+    )
+    
+    fig.update_xaxes(title_text="Elasticity [%]", row=1, col=1)
+    fig.update_xaxes(title_text="Drop [%]", row=1, col=2)
+    
+    return fig
+

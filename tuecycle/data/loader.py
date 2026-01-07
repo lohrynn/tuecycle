@@ -160,32 +160,45 @@ class DataManager:
         # Load weather for this city
         weather_df = self._load_weather_data(station.station)
         
+        # Weather columns to include (for composite weather index)
+        weather_cols = [
+            'datetime',
+            'precipitation (mm)',
+            'temperature_2m (°C)',
+            'relative_humidity_2m (%)',
+            'wind_speed_10m (km/h)',
+            'cloud_cover (%)',
+        ]
+        
+        # Filter to only existing columns
+        available_weather_cols = [c for c in weather_cols if c in weather_df.columns]
+        
         # Merge on datetime
         merged = pd.merge(
             counter_df[['datetime', 'channels_all']],
-            weather_df[['datetime', 'precipitation (mm)', 'temperature_2m (°C)']],
+            weather_df[available_weather_cols],
             on='datetime',
             how='outer'
         ).sort_values('datetime')
         
-        # Filter merged data to the requested date range
-        # This ensures we don't include extra weather data outside the date range
-        # start_year, start_month, start_day = self.start_date
-        # end_year, end_month, end_day = self.end_date
-        # start_ts = pd.Timestamp(start_year, start_month, start_day, 0, 0)
-        # end_ts = pd.Timestamp(end_year, end_month, end_day, 23, 0)
-        # merged = merged[
-        #     (merged['datetime'] >= start_ts) & 
-        #     (merged['datetime'] <= end_ts)
-        # ]
+        # Rename columns for cleaner access
+        rename_map = {
+            'channels_all': 'bike',
+            'precipitation (mm)': 'rain',
+            'temperature_2m (°C)': 'temp',
+        }
+        merged = merged.rename(columns=rename_map)
         
-        # Rename columns
-        merged = merged.rename(columns={'channels_all': 'bike', 'precipitation (mm)': 'rain', 'temperature_2m (°C)': 'temp'})
+        # Ensure numeric types for core columns
+        numeric_cols = ['bike', 'rain', 'temp']
+        for col in numeric_cols:
+            if col in merged.columns:
+                merged[col] = pd.to_numeric(merged[col], errors='coerce')
         
-        # Ensure numeric types
-        merged[['bike', 'rain', 'temp']] = merged[['bike', 'rain', 'temp']].apply(
-            pd.to_numeric, errors='coerce'
-        )
+        # Ensure numeric types for additional weather columns
+        for col in ['relative_humidity_2m (%)', 'wind_speed_10m (km/h)', 'cloud_cover (%)']:
+            if col in merged.columns:
+                merged[col] = pd.to_numeric(merged[col], errors='coerce')
         
         return merged.reset_index(drop=True)
     
@@ -281,3 +294,112 @@ class DataManager:
             if self._cache_path(alias).exists():
                 cached.append(alias)
         return cached
+
+    def get_city_aggregate(
+        self,
+        stations: list[str],
+        force_reload: bool = False,
+        winsorize_percentiles: tuple[float, float] | None = (0.01, 0.99),
+    ) -> pd.DataFrame:
+        """Get z-score normalized aggregate of multiple stations.
+        
+        Loads data for the specified stations and aggregates their bike counts
+        using z-score normalization. This creates a unified city-level representation
+        that removes scale differences between stations while preserving patterns.
+        
+        The resulting DataFrame has a 'bike' column containing the normalized index,
+        compatible with all existing plot functions and weather elasticity metrics.
+        
+        Args:
+            stations: List of station aliases to aggregate.
+            force_reload: If True, reload from CSVs even if cache exists.
+            winsorize_percentiles: Tuple of (lower, upper) percentiles for winsorization.
+                                   Default (0.01, 0.99) caps outliers at 1st/99th percentiles.
+                                   Set to None to disable outlier treatment.
+            
+        Returns:
+            DataFrame with z-score normalized bike counts and weather data.
+            
+        Example:
+            >>> dm = DataManager()
+            >>> # Aggregate all Heidelberg stations
+            >>> hd = dm.get_city_aggregate([
+            ...     "heidelberg_kurfuersten",
+            ...     "heidelberg_mannheimer", 
+            ...     "heidelberg_gaisberg"
+            ... ])
+            >>> 
+            >>> # Without outlier treatment
+            >>> hd = dm.get_city_aggregate([...], winsorize_percentiles=None)
+        """
+        from tuecycle.utils.transforms import aggregate_stations_zscore
+        
+        # Load all requested stations
+        dfs = self.get_multiple(stations, force_reload=force_reload)
+        
+        # Aggregate using z-score method with optional winsorization
+        return aggregate_stations_zscore(
+            dfs, 
+            stations=stations, 
+            winsorize_percentiles=winsorize_percentiles
+        )
+
+    def get_city(
+        self,
+        city: str,
+        exclude: list[str] | None = None,
+        force_reload: bool = False,
+        winsorize_percentiles: tuple[float, float] | None = (0.01, 0.99),
+    ) -> pd.DataFrame:
+        """Get z-score normalized aggregate of all stations in a city.
+        
+        Convenience wrapper around get_city_aggregate() that automatically finds
+        all stations for a city name. Only includes stations that have weather data.
+        
+        Args:
+            city: City name (e.g., "heidelberg", "mannheim"). Case-insensitive.
+            exclude: Optional list of station aliases to exclude from aggregation.
+            force_reload: If True, reload from CSVs even if cache exists.
+            winsorize_percentiles: Tuple of (lower, upper) percentiles for winsorization.
+                                   Default (0.01, 0.99) caps outliers at 1st/99th percentiles.
+                                   Set to None to disable outlier treatment.
+            
+        Returns:
+            DataFrame with z-score normalized bike counts.
+            
+        Example:
+            >>> dm = DataManager()
+            >>> # Get all Heidelberg stations aggregated
+            >>> hd = dm.get_city("heidelberg")
+            >>> 
+            >>> # Exclude specific stations
+            >>> hd = dm.get_city("heidelberg", exclude=["heidelberg_gaisberg"])
+            >>> 
+            >>> # Without outlier treatment
+            >>> hd = dm.get_city("heidelberg", winsorize_percentiles=None)
+        """
+        from tuecycle.config.stations import get_stations_by_city, list_stations_with_weather
+        
+        city_stations = get_stations_by_city(city)
+        if not city_stations:
+            raise ValueError(f"No stations found for city '{city}'")
+        
+        # Only include stations with weather data
+        available = set(list_stations_with_weather(self.base_path))
+        station_aliases = [s.alias for s in city_stations if s.alias in available]
+        
+        if not station_aliases:
+            raise ValueError(f"No stations with weather data found for city '{city}'")
+        
+        # Apply exclusions
+        if exclude:
+            station_aliases = [a for a in station_aliases if a not in exclude]
+        
+        if not station_aliases:
+            raise ValueError(f"All stations excluded for city '{city}'")
+        
+        return self.get_city_aggregate(
+            station_aliases, 
+            force_reload=force_reload,
+            winsorize_percentiles=winsorize_percentiles
+        )

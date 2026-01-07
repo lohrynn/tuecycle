@@ -369,3 +369,104 @@ def compute_rolling_baseline(
     ).replace([np.inf, -np.inf], np.nan)
     
     return df
+
+
+def aggregate_stations_zscore(
+    dfs: dict[str, pd.DataFrame],
+    stations: list[str] | None = None,
+    bike_col: str = 'bike',
+    winsorize_percentiles: tuple[float, float] | None = (0.01, 0.99),
+) -> pd.DataFrame:
+    """Aggregate multiple stations into a single city-level representation using z-score normalization.
+    
+    Each station's bike counts are z-score normalized (mean=0, std=1), then averaged
+    across stations for each timestamp. This removes scale differences between stations
+    while preserving temporal patterns.
+    
+    The resulting 'bike' column represents a normalized city-wide cycling index that
+    can be used with all existing plot functions and weather elasticity metrics.
+    
+    Args:
+        dfs: Dictionary mapping station aliases to DataFrames (from DataManager.get_multiple()).
+        stations: List of station aliases to include. If None, uses all stations in dfs.
+        bike_col: Name of the bike count column in input DataFrames.
+        winsorize_percentiles: Tuple of (lower, upper) percentiles for winsorization.
+                               Values outside these percentiles are capped before z-scoring.
+                               Default (0.01, 0.99) caps at 1st and 99th percentiles.
+                               Set to None to disable winsorization.
+        
+    Returns:
+        DataFrame with columns:
+            - datetime: Timestamp
+            - bike: Z-score normalized average across selected stations
+            - bike_raw_sum: Sum of raw counts (for reference)
+            - n_stations: Number of stations with data at each timestamp
+            - Plus all weather columns from the first station (rain, temp, etc.)
+            
+    Example:
+        >>> dm = DataManager()
+        >>> dfs = dm.get_multiple(["heidelberg_kurfuersten", "heidelberg_mannheimer", "heidelberg_gaisberg"])
+        >>> # Default: with winsorization
+        >>> city_df = aggregate_stations_zscore(dfs)
+        >>> 
+        >>> # More aggressive outlier capping
+        >>> city_df = aggregate_stations_zscore(dfs, winsorize_percentiles=(0.005, 0.995))
+        >>> 
+        >>> # No outlier treatment
+        >>> city_df = aggregate_stations_zscore(dfs, winsorize_percentiles=None)
+    """
+    if stations is None:
+        stations = list(dfs.keys())
+    
+    # Filter to requested stations
+    selected_dfs = {k: v for k, v in dfs.items() if k in stations}
+    
+    if not selected_dfs:
+        raise ValueError(f"No matching stations found. Available: {list(dfs.keys())}")
+    
+    # Compute z-scores for each station
+    zscore_dfs = []
+    for alias, df in selected_dfs.items():
+        df = df.copy()
+        
+        # Apply winsorization if requested
+        bike_data = df[bike_col].copy()
+        if winsorize_percentiles is not None:
+            lower_pct, upper_pct = winsorize_percentiles
+            lower_bound = bike_data.quantile(lower_pct)
+            upper_bound = bike_data.quantile(upper_pct)
+            bike_data = bike_data.clip(lower=lower_bound, upper=upper_bound)
+        
+        # Compute z-score for bike counts
+        mean_bike = bike_data.mean()
+        std_bike = bike_data.std()
+        
+        if std_bike > 0:
+            df['bike_zscore'] = (bike_data - mean_bike) / std_bike
+        else:
+            df['bike_zscore'] = 0.0
+        
+        df['station'] = alias
+        zscore_dfs.append(df)
+    
+    # Combine all stations
+    combined = pd.concat(zscore_dfs, ignore_index=True)
+    
+    # Aggregate by timestamp: mean of z-scores and sum of raw counts
+    agg_result = combined.groupby('datetime').agg({
+        'bike_zscore': 'mean',
+        bike_col: ['sum', 'count'],
+    }).reset_index()
+    
+    # Flatten column names
+    agg_result.columns = ['datetime', 'bike', 'bike_raw_sum', 'n_stations']
+    
+    # Add weather data from the first station (assuming same location/weather)
+    first_station = list(selected_dfs.values())[0]
+    weather_cols = [c for c in first_station.columns if c not in ['datetime', bike_col, 'bike_zscore', 'station']]
+    
+    if weather_cols:
+        weather_df = first_station[['datetime'] + weather_cols].drop_duplicates(subset='datetime')
+        agg_result = agg_result.merge(weather_df, on='datetime', how='left')
+    
+    return agg_result.sort_values('datetime').reset_index(drop=True)
