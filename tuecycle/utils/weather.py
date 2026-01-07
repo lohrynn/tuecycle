@@ -52,9 +52,9 @@ class WeatherCompositeIndex:
     LOADER_COLUMNS = {
         'temp_c': 'temp',
         'precip_mm': 'rain',
-        'wind_ms': 'wind_speed_10m (km/h)',
-        'humidity_pct': 'relative_humidity_2m (%)',
-        'cloud_cover': 'cloud_cover (%)',
+        'wind_ms': 'wind',
+        'humidity_pct': 'humidity',
+        'cloud_cover': 'clouds',
     }
     
     def __init__(self, df: pd.DataFrame, column_mapping: dict | None = None):
