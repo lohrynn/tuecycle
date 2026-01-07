@@ -124,12 +124,12 @@ class DataManager:
         
         return df_hourly.sort_values('iso_timestamp').reset_index(drop=True)
     
-    def _load_weather_data(self, station: str) -> pd.DataFrame:
+    def _load_weather_data(self, station_alias: str) -> pd.DataFrame:
         """Load weather data for a station."""
         
         weather_file = (
             self.base_path / 
-            f"weather_data/hourly/weather_{station.lower()}.csv"
+            f"weather_data/hourly/weather_{station_alias.lower()}.csv"
         )
         
         if not weather_file.exists():
@@ -158,7 +158,7 @@ class DataManager:
         counter_df = counter_df.rename(columns={'iso_timestamp': 'datetime'})
         
         # Load weather for this city
-        weather_df = self._load_weather_data(station.station)
+        weather_df = self._load_weather_data(station.alias)
         
         # Weather columns to include (for composite weather index)
         weather_cols = [
@@ -186,6 +186,9 @@ class DataManager:
             'channels_all': 'bike',
             'precipitation (mm)': 'rain',
             'temperature_2m (°C)': 'temp',
+            'cloud_cover (%)': 'clouds',
+            'wind_speed_10m (km/h)': 'wind',
+            'relative_humidity_2m (%)': 'humidity',
         }
         merged = merged.rename(columns=rename_map)
         
@@ -196,7 +199,7 @@ class DataManager:
                 merged[col] = pd.to_numeric(merged[col], errors='coerce')
         
         # Ensure numeric types for additional weather columns
-        for col in ['relative_humidity_2m (%)', 'wind_speed_10m (km/h)', 'cloud_cover (%)']:
+        for col in ['humidity', 'wind', 'clouds']:
             if col in merged.columns:
                 merged[col] = pd.to_numeric(merged[col], errors='coerce')
         
@@ -210,7 +213,7 @@ class DataManager:
             force_reload: If True, reload from CSVs even if cache exists.
             
         Returns:
-            DataFrame with columns: datetime, bike, rain, temp
+            DataFrame with columns: datetime, bike, rain, temp, clouds, wind, day
         """
         # Check in-memory cache first
         if station_alias in self._data_cache and not force_reload:

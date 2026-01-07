@@ -31,8 +31,7 @@ Edit `tuecycle/config/stations.py` and add a new entry to the `STATIONS` diction
 
 ```python
 STATIONS["freiburg_wiwili"] = Station(
-    alias="freiburg_wiwili",                # Short identifier (used in code)
-    station="freiburg_wiwilibruecke",       # Must match weather file name!
+    alias="freiburg_wiwili",                # Short identifier matching the weather file (used in code)
     counter_name="Wiwilibrücke",            # Exact name from CSV
     display_name="Freiburg (Wiwilibrücke)", # Human-readable for plots
     color="#FDB462",                        # Hex color for multi-station plots
@@ -41,7 +40,7 @@ STATIONS["freiburg_wiwili"] = Station(
 
 ### Step 3: Ensure Weather Data Exists
 
-The `station` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
+The `alias` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
 
 ### Step 4: Test
 
@@ -65,10 +64,10 @@ You can obtain hourly weather data from [Open-Meteo](https://open-meteo.com/en/d
 Weather files must be placed in `weather_data/hourly/` with this naming convention:
 
 ```shell
-weather_{city}_{station}.csv
+weather_{city}_{station_alias}.csv
 ```
 
-Example: `weather_freiburg_wiwilibruecke.csv`
+Example: `weather_freiburg_wiwili.csv`
 
 ### Required Columns
 
@@ -77,8 +76,20 @@ The CSV must have these columns:
 | Column | Description | Example |
 | ------ | ----------- | ------- |
 | `time` | ISO datetime | `2019-12-01T00:00` |
-| `temperature_2m (°C)` | Temperature in °C | `5.2` |
-| `precipitation (mm)` | Precipitation in mm | `0.5` |
+| `temperature_2m (°C)` | Temperature in °C | `5.2 = 5.2°C` |
+| `precipitation (mm)` | Precipitation in mm | `0.5 = 0.5mm` |
+| `cloud_cover (%)` | Total cloud cover as an area fraction | `5 = 5%` |
+| `wind_speed_10m (km/h)` | Wind speed at 10 meters above ground | `5 = 5km/h` |
+| `is_day ()` | Day or night | `0 = night, 1 = day` |
+
+
+
+When using get(), the columns are renamed as follows:
+- `precipitation (mm)`: rain`, 
+- `temperature_2m (°C)`: `temp`,
+- `cloud_cover (%)`: `clouds`,
+- `wind_speed_10m (km/h)`: `wind`,
+- `is_day ()`: `day`
 
 Optional columns (not currently used but can be kept):
 apparent_temperature (°C),rain (mm),snow_depth (m),snowfall (cm),weather_code (wmo code),cloud_cover (%),cloud_cover_high (%),cloud_cover_mid (%),cloud_cover_low (%),wind_speed_10m (km/h),wind_direction_100m (°),wind_direction_10m (°),wind_speed_100m (km/h),wind_gusts_10m (km/h),is_day (),sunshine_duration (s),pressure_msl (hPa),surface_pressure (hPa)
