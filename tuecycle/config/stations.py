@@ -468,7 +468,7 @@ def get_stations_by_city(city: str) -> list[Station]:
     # Map ä,ö,ü to ae,oe,ue for matching
     city_lower = city_lower.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue")
     
-    return [s for s in STATIONS.values() if s.station.lower().startswith(city_lower)]
+    return [s for s in STATIONS.values() if s.alias.lower().startswith(city_lower)]
 
 
 def list_stations_with_weather(base_path: str | Path = ".") -> list[str]:
