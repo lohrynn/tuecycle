@@ -17,17 +17,17 @@ This guide explains how to extend the tuecycle package with new stations, weathe
 
 ### Step 1: Find the Counter Name
 
-First, identify the exact `counter_site` name from the eco-counter CSV files. Open any CSV in `eco-counter/all_cities/YYYY/MM.csv` and look at the `counter_site` column.
+First, identify the exact `counter_site` name from the eco-counter CSV files. Open any CSV in `data/bike_data/YYYY/MM.csv` and look at the `counter_site` column.
 
 ```python
 import pandas as pd
-df = pd.read_csv("eco-counter/all_cities/2024/11.csv")
+df = pd.read_csv("data/bike_data/2024/11.csv")
 print(df['counter_site'].unique())
 ```
 
 ### Step 2: Add to Station Registry
 
-Edit `tuecycle/config/stations.py` and add a new entry to the `STATIONS` dictionary:
+Edit `src/tuecycle/config/stations.py` and add a new entry to the `STATIONS` dictionary:
 
 ```python
 STATIONS["freiburg_wiwili"] = Station(
@@ -40,7 +40,7 @@ STATIONS["freiburg_wiwili"] = Station(
 
 ### Step 3: Ensure Weather Data Exists
 
-The `alias` field must match a weather file in `weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
+The `alias` field must match a weather file in `data/weather_data/hourly/`. If the city doesn't exist yet, see [Section 2](#2-adding-weather-data-for-a-new-city).
 
 ### Step 4: Test
 
@@ -61,7 +61,7 @@ You can obtain hourly weather data from [Open-Meteo](https://open-meteo.com/en/d
 
 ### Required File Format
 
-Weather files must be placed in `weather_data/hourly/` with this naming convention:
+Weather files must be placed in `data/weather_data/hourly/` with this naming convention:
 
 ```shell
 weather_{city}_{station_alias}.csv
@@ -108,7 +108,7 @@ apparent_temperature (°C),rain (mm),snow_depth (m),snowfall (cm),weather_code (
 
 ## 3. Creating a New Plot Function
 
-### Step 1: Add Function to `tuecycle/plots/functions.py`
+### Step 1: Add Function to `src/tuecycle/plots/functions.py`
 
 Use the `@register_plot` decorator to automatically register your plot:
 

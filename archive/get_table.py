@@ -26,7 +26,7 @@ def get_bike_table(start_year, start_month, start_day, end_year, end_month, end_
         
         # Load only the relevant month files
         for month in months:
-            file_pattern = f"eco-counter/all_cities/{year}/{month:02d}.csv"
+            file_pattern = f"data/bike_data/{year}/{month:02d}.csv"
             matching_files = glob.glob(file_pattern)
             
             for f in matching_files:
@@ -72,7 +72,7 @@ def get_table_with_weather(city,counter_name, start_year, start_month, start_day
             - temp: Temperature in °C)
     """
 
-    weather_hourly = pd.read_csv(f'weather_data/hourly/{city.lower()}_weather_{start_year}-{start_month}-{start_day}_{end_year}-{end_month}-{end_day}.csv')
+    weather_hourly = pd.read_csv(f'data/weather_data/hourly/{city.lower()}_weather_{start_year}-{start_month}-{start_day}_{end_year}-{end_month}-{end_day}.csv')
 
     bike_hourly = get_bike_table(start_year, start_month, start_day, end_year, end_month, end_day)
     bike_hourly = bike_hourly[bike_hourly['counter_site'] == counter_name]

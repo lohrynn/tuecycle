@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tuecycle"
+version = "0.1.0"
+description = "Data Literacy Project: Bike counter and weather data analysis"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = []
+
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "pyarrow>=14.0.0",
+    "plotly>=5.18.0",
+    "scipy>=1.11.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipywidgets>=8.0.0",
+    "jupyter>=1.0.0",
+    "nbformat>=4.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/lohrynn/tuecycle"
+Repository = "https://github.com/lohrynn/tuecycle"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tuecycle*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+tuecycle = ["py.typed"]

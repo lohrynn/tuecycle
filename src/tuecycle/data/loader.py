@@ -42,8 +42,8 @@ class DataManager:
         """Initialize the DataManager.
         
         Args:
-            base_path: Base path to the project directory containing eco-counter/
-                       and weather_data/ folders.
+            base_path: Base path to the project directory containing data/bike_data/
+                       and data/weather_data/ folders.
             cache_dir: Directory for Parquet cache files (relative to base_path).
             start_date: Tuple of (year, month, day) for data start.
             end_date: Tuple of (year, month, day) for data end.
@@ -84,7 +84,7 @@ class DataManager:
                 months = range(1, 13)
             
             for month in months:
-                file_pattern = self.base_path / f"eco-counter/all_cities/{year}/{month:02d}.csv"
+                file_pattern = self.base_path / f"data/bike_data/{year}/{month:02d}.csv"
                 matching_files = glob.glob(str(file_pattern))
                 
                 for f in matching_files:
@@ -129,7 +129,7 @@ class DataManager:
         
         weather_file = (
             self.base_path / 
-            f"weather_data/hourly/weather_{station_alias.lower()}.csv"
+            f"data/weather_data/hourly/weather_{station_alias.lower()}.csv"
         )
         
         if not weather_file.exists():

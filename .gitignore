@@ -210,5 +210,6 @@ __marimo__/
 
 *.DS_Store*
 tmp
-eco-counter/all_cities/.DS_Store
+data/bike_data/.DS_Store
+data/weather_data/.DS_Store
 cache/

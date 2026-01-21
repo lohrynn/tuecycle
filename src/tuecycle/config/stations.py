@@ -475,14 +475,14 @@ def list_stations_with_weather(base_path: str | Path = ".") -> list[str]:
     """List station aliases that have both bike counter data AND weather data.
     
     Args:
-        base_path: Base path to the project directory containing weather_data/.
+        base_path: Base path to the project directory containing data/weather_data/.
                    Defaults to current directory.
     
     Returns:
         List of station aliases that have weather data available.
     """
     base = Path(base_path)
-    weather_dir = base / "weather_data" / "hourly"
+    weather_dir = base / "data" / "weather_data" / "hourly"
     
     if not weather_dir.exists():
         return []
@@ -510,7 +510,7 @@ def check_station_data_availability(alias: str, base_path: str | Path = ".") -> 
         Dictionary with keys 'registered', 'has_weather' indicating availability.
     """
     base = Path(base_path)
-    weather_dir = base / "weather_data" / "hourly"
+    weather_dir = base / "data" / "weather_data" / "hourly"
     
     result = {
         'registered': alias in STATIONS,

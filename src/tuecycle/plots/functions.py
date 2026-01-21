@@ -1185,6 +1185,7 @@ def plot_weather_index_scatter(
     df: pd.DataFrame,
     title: str = "Bike Count vs Weather Index",
     hour_range: tuple[int, int] | None = (6, 22),
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """Scatter plot showing relationship between weather index and bike counts.
     
@@ -1196,6 +1197,7 @@ def plot_weather_index_scatter(
         title: Plot title.
         hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
                    Default is (6, 22) for daytime hours.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with scatter plot and trendline.
@@ -1219,12 +1221,16 @@ def plot_weather_index_scatter(
             )
             return fig
     
+    # Apply filters
     if hour_range is not None:
         df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
         time_label = f" ({hour_range[0]}-{hour_range[1]}h)"
     else:
         df_clean = df
         time_label = ""
+    
+    if weekdays_only:
+        df_clean = df_clean[df_clean['dayofweek'] < 5]
     
     df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
     
@@ -1288,6 +1294,7 @@ def plot_weather_quartile_boxplot(
     df: pd.DataFrame,
     title: str = "Bike Counts by Weather Quality",
     hour_range: tuple[int, int] | None = (6, 22),
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """Box plot comparing bike counts across weather quartiles.
     
@@ -1299,6 +1306,7 @@ def plot_weather_quartile_boxplot(
         title: Plot title.
         hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
                    Default is (6, 22) for daytime hours.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with box plots.
@@ -1321,12 +1329,16 @@ def plot_weather_quartile_boxplot(
             )
             return fig
     
+    # Apply filters
     if hour_range is not None:
         df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
         time_label = f" ({hour_range[0]}-{hour_range[1]}h)"
     else:
         df_clean = df
         time_label = ""
+    
+    if weekdays_only:
+        df_clean = df_clean[df_clean['dayofweek'] < 5]
     
     df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
     df_clean = add_weather_quartile(df_clean)
@@ -1374,6 +1386,7 @@ def plot_city_elasticity_comparison(
     data_dict: dict,
     title: str = "Weather Elasticity by City",
     hour_range: tuple[int, int] | None = (6, 22),
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """Bar chart comparing weather elasticity across multiple stations.
     
@@ -1387,6 +1400,7 @@ def plot_city_elasticity_comparison(
         title: Plot title.
         hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
                    Default is (6, 22) for daytime hours.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with bar chart.
@@ -1416,10 +1430,14 @@ def plot_city_elasticity_comparison(
             except ValueError:
                 continue
         
+        # Apply filters
         if hour_range is not None:
             df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
         else:
             df_clean = df
+        
+        if weekdays_only:
+            df_clean = df_clean[df_clean['dayofweek'] < 5]
         
         # Estimate elasticity
         elasticity_result = estimate_city_elasticity(df_clean)
@@ -1510,6 +1528,7 @@ def plot_city_elasticity_comparison(
 def plot_weather_index_hourly(
     df: pd.DataFrame,
     title: str = "Hourly Pattern by Weather Quality",
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """Compare hourly bike patterns between good and bad weather.
     
@@ -1519,6 +1538,7 @@ def plot_weather_index_hourly(
     Args:
         df: DataFrame with bike counts and weather data.
         title: Plot title.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with hourly comparison.
@@ -1542,6 +1562,10 @@ def plot_weather_index_hourly(
             return fig
     
     df_clean = df.dropna(subset=['bike', 'weather_index'])
+    
+    if weekdays_only:
+        df_clean = df_clean[df_clean['dayofweek'] < 5]
+    
     df_clean = add_weather_quartile(df_clean)
     
     # Colors from good (green) to bad (red)
@@ -1585,6 +1609,7 @@ def plot_city_weather_sensitivity_heatmap(
     data_dict: dict,
     title: str = "Weather Sensitivity by Hour and City",
     hour_range: tuple[int, int] | None = (6, 22),
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """Heatmap showing how weather sensitivity varies by hour across cities.
     
@@ -1600,6 +1625,7 @@ def plot_city_weather_sensitivity_heatmap(
         title: Plot title.
         hour_range: Tuple of (start_hour, end_hour) to display, or None for all hours.
                    Default is (6, 22) for daytime hours.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with heatmap.
@@ -1628,6 +1654,11 @@ def plot_city_weather_sensitivity_heatmap(
                 continue
         
         df_clean = df.dropna(subset=['bike', 'weather_index'])
+        
+        # Apply weekday filter if requested
+        if weekdays_only:
+            df_clean = df_clean[df_clean['dayofweek'] < 5]
+        
         df_clean = add_weather_quartile(df_clean)
         
         # Calculate hourly sensitivity as absolute difference (Q4 - Q1)
@@ -1701,6 +1732,7 @@ def plot_city_resilience_ranking(
     data_dict: dict,
     title: str = "City Weather Resilience Ranking",
     hour_range: tuple[int, int] | None = (6, 22),
+    weekdays_only: bool = False,
 ) -> go.Figure:
     """
     Horizontal bar chart ranking cities by their weather resilience.
@@ -1715,6 +1747,7 @@ def plot_city_resilience_ranking(
         title: Plot title.
         hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
                    Default is (6, 22) for daytime hours.
+        weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
         
     Returns:
         Plotly Figure with horizontal bar chart and metrics.
@@ -1744,12 +1777,17 @@ def plot_city_resilience_ranking(
             except ValueError:
                 continue
         
+        # Apply filters
         if hour_range is not None:
             df_clean = filter_daytime(df, start_hour=hour_range[0], end_hour=hour_range[1])
         else:
             df_clean = df
         
         df_clean = df_clean.dropna(subset=['bike', 'weather_index'])
+        
+        if weekdays_only:
+            df_clean = df_clean[df_clean['dayofweek'] < 5]
+        
         df_clean = add_weather_quartile(df_clean)
         
         # Calculate elasticity
