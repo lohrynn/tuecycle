@@ -1267,11 +1267,11 @@ def plot_weather_index_scatter(
     ))
     
     # Add Q1 and Q3 reference lines
-    q1 = df_clean['weather_index'].quantile(0.25)
+    q1 = df_clean['weather_index'].quantile(0.50)
     q3 = df_clean['weather_index'].quantile(0.75)
     
     fig.add_vline(x=q1, line_dash="dash", line_color="green",
-                  annotation_text="Q1 (Good)", annotation_position="top")
+                  annotation_text="Q2 (Semi Good)", annotation_position="top")
     fig.add_vline(x=q3, line_dash="dash", line_color="red",
                   annotation_text="Q3 (Bad)", annotation_position="top")
     
@@ -1387,6 +1387,9 @@ def plot_city_elasticity_comparison(
     title: str = "Weather Elasticity by City",
     hour_range: tuple[int, int] | None = (6, 22),
     weekdays_only: bool = False,
+    weekend_only: bool = False,
+    quantile_a: float = 0.25,
+    quantile_b: float = 0.75,
 ) -> go.Figure:
     """Bar chart comparing weather elasticity across multiple stations.
     
@@ -1401,7 +1404,10 @@ def plot_city_elasticity_comparison(
         hour_range: Tuple of (start_hour, end_hour) to filter hours, or None for all hours.
                    Default is (6, 22) for daytime hours.
         weekdays_only: If True, only include weekdays (Mon-Fri). Default False (all days).
-        
+        weekend_only: If True, only include weekends (Sat-Sun). Default False (all days).
+        quantile_a: Lower quantile for elasticity calculation (default 0.25).
+        quantile_b: Upper quantile for elasticity calculation (default 0.75).
+
     Returns:
         Plotly Figure with bar chart.
     """
@@ -1439,8 +1445,11 @@ def plot_city_elasticity_comparison(
         if weekdays_only:
             df_clean = df_clean[df_clean['dayofweek'] < 5]
         
+        if weekend_only:
+            df_clean = df_clean[df_clean['dayofweek'] >= 5]
+        
         # Estimate elasticity
-        elasticity_result = estimate_city_elasticity(df_clean)
+        elasticity_result = estimate_city_elasticity(df_clean, quantile_a=quantile_a, quantile_b=quantile_b)
         
         if not np.isnan(elasticity_result['elasticity']):
             results.append({

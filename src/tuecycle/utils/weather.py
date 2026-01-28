@@ -259,6 +259,8 @@ def estimate_city_elasticity(
     bike_col: str = 'bike',
     weather_index_col: str = 'weather_index',
     use_log: bool = True,
+    quantile_a: float = 0.25,
+    quantile_b: float = 0.75,
 ) -> dict:
     """
     Estimate weather elasticity for a city using log-linear regression.
@@ -278,7 +280,7 @@ def estimate_city_elasticity(
             - elasticity: Percentage change in ridership (Q1→Q3)
             - r_squared: R² of the regression
             - n_obs: Number of observations used
-            - q1, q3: Quartile values used for elasticity calculation
+            - qa, qb: Quartile values used for elasticity calculation
             - pvalue: P-value for the beta coefficient
     """
     # Prepare data
@@ -308,9 +310,9 @@ def estimate_city_elasticity(
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
     
     # Calculate quartiles from the data
-    q1 = x.quantile(0.25)
-    q3 = x.quantile(0.75)
-    
+    q1 = x.quantile(quantile_a)
+    q3 = x.quantile(quantile_b)
+
     # Calculate elasticity using the formula
     weather_diff = q3 - q1
     if use_log:
