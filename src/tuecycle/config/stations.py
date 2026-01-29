@@ -432,7 +432,7 @@ def get_stations_by_city(city: str) -> list[Station]:
     return [s for s in STATIONS.values() if s.alias.lower().startswith(city_lower)]
 
 
-def list_stations_with_weather(base_path: str | Path = ".") -> list[str]:
+def list_stations_with_weather(base_path: str | Path = "./..") -> list[str]:
     """List station aliases that have both bike counter data AND weather data.
     
     Args:
@@ -446,7 +446,7 @@ def list_stations_with_weather(base_path: str | Path = ".") -> list[str]:
     weather_dir = base / "data" / "weather_data" / "hourly"
     
     if not weather_dir.exists():
-        return []
+        raise FileNotFoundError(f"Weather data directory not found: {weather_dir}")
     
     available_stations = []
     

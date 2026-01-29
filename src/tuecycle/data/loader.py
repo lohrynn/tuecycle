@@ -34,7 +34,7 @@ class DataManager:
     
     def __init__(
         self,
-        base_path: str | Path = ".",
+        base_path: str | Path = "./..",
         cache_dir: str | Path = "cache",
         start_date: Tuple[int, int, int] = (2024, 11, 1),
         end_date: Tuple[int, int, int] = (2025, 10, 31),

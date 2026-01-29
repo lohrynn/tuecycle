@@ -4,7 +4,7 @@ A Python package for analyzing bike counter data with weather correlations.
 
 ## Project Structure
 
-```
+```bash
 tuecycle/
 ├── src/
 │   └── tuecycle/          # Main package
@@ -61,6 +61,7 @@ print(list_plots())
 ## Development
 
 See [GUIDE.md](GUIDE.md) for details on:
+
 - Adding new bike counting stations
 - Adding weather data for new cities
 - Creating custom plot functions
@@ -68,4 +69,4 @@ See [GUIDE.md](GUIDE.md) for details on:
 ## Data Sources
 
 - Bike counter data: eco-counter CSV files
-- Weather data: Open-Meteo (https://open-meteo.com/)
+- Weather data: [Open-Meteo](https://open-meteo.com/)
