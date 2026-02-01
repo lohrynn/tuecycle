@@ -274,7 +274,7 @@ STATIONS: Dict[str, Station] = {
     #     display_name="Stuttgart (Böblinger Straße)",
     #     color="#BEBADA",
     # ),
-    "stuttgart_insel": Station(
+    "stuttgart_insel": Station(                       # remove?
         alias="stuttgart_insel",
         counter_name="Inselstraße",
         display_name="Stuttgart (Inselstraße)",
@@ -286,13 +286,13 @@ STATIONS: Dict[str, Station] = {
     #     display_name="Stuttgart (Kirchheimer Straße)",
     #     color="#BEBADA",
     # ),
-    "stuttgart_koenig_karls": Station(
+    "stuttgart_koenig_karls": Station(                       # remove?
         alias="stuttgart_koenig_karls",
         counter_name="König-Karls-Brücke Barometer",
         display_name="Stuttgart (König-Karls-Brücke)",
         color="#BEBADA",
     ),
-    "stuttgart_kraeherwald": Station(
+    "stuttgart_kraeherwald": Station(                       # remove?
         alias="stuttgart_kraeherwald",
         counter_name="Am Kräherwald",
         display_name="Stuttgart (Am Kräherwald)",
@@ -316,7 +316,7 @@ STATIONS: Dict[str, Station] = {
     #     display_name="Stuttgart (Neckartalstraße)",
     #     color="#BEBADA",
     # ),
-    "stuttgart_samara": Station(
+    "stuttgart_samara": Station(                       # remove?
         alias="stuttgart_samara",
         counter_name="Samaraweg",
         display_name="Stuttgart (Samaraweg)",
@@ -328,19 +328,19 @@ STATIONS: Dict[str, Station] = {
     #     display_name="Stuttgart (Solitudestraße)",
     #     color="#BEBADA",
     # ),
-    "stuttgart_stuttgarter": Station(
+    "stuttgart_stuttgarter": Station(                       # remove?
         alias="stuttgart_stuttgarter",
         counter_name="Stuttgarter Straße",
         display_name="Stuttgart (Stuttgarter Straße)",
         color="#BEBADA",
     ),
-    "stuttgart_taubenheim": Station(
+    "stuttgart_taubenheim": Station(                       # remove?
         alias="stuttgart_taubenheim",
         counter_name="Taubenheimstraße",
         display_name="Stuttgart (Taubenheimstraße)",
         color="#BEBADA",
     ),
-    "stuttgart_waiblinger": Station(
+    "stuttgart_waiblinger": Station(                       # remove?
         alias="stuttgart_waiblinger",
         counter_name="Waiblinger Straße",
         display_name="Stuttgart (Waiblinger Straße)",
